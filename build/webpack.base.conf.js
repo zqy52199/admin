@@ -36,11 +36,21 @@ module.exports = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
-      },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'babel-loader',
+      //   include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+      // },
+	  {
+	    test: /\.js$/,
+	    exclude: /(node_modules|bower_components)/,
+	    use: {
+	      loader: 'babel-loader',
+	      options: {
+	        presets: ['es2015']
+	      }
+	    }
+	  },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

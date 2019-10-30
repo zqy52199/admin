@@ -14,7 +14,7 @@
     <div class='search_box1 laji' v-if="showInput == 2">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
+        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
         <el-form-item >
           <span class="demonstration">经营品类: </span>
           <el-cascader v-model="value" :options="options" :props="{ expandTrigger: 'hover' }" @change="handleChange"></el-cascader>
@@ -28,7 +28,7 @@
     <div class='search_box1' v-if="showInput == 3">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
+        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
         <el-form-item label="审核状态:">
           <el-select v-model="formInline.status" filterable placeholder="请选择">
             <el-option label="待审核" value="0"></el-option>
@@ -467,7 +467,7 @@ export default {
 }
 
 #search .el-input {
-  height: 30px;
+  height: 40px;
   width: 150px;
 }
 
@@ -483,13 +483,7 @@ export default {
   height: 30px;
 }
 
-.search_box1 .el-input__suffix {
-  top: 10px;
-}
 
-.laji .el-input__suffix {
-  top: 0;
-}
 .shenTime .el-date-editor .el-range__icon, .el-date-editor .el-range-separator {
   line-height: 23px;
 }

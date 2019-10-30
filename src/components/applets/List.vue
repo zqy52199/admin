@@ -23,9 +23,15 @@
                <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="银行账号:">
                   <span>{{ props.row.bank }}</span>
                 </el-form-item></div></el-col>
-               <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="所在地区">
+               <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="所在地区:">
                   <span>{{ props.row.address }}</span>
                 </el-form-item></div></el-col>
+                <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="注册日期:">
+                   <span>{{ props.row.addTime }}</span>
+                 </el-form-item></div></el-col>
+                 <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="绑定微信号:">
+                    <span>{{ props.row.wechat }}</span>
+                  </el-form-item></div></el-col>
                 <el-col :span="24"><div class="grid-content bg-purple"><el-form-item label="详细地址:">
                    <span>{{ props.row.address }}</span>
                  </el-form-item></div></el-col>
@@ -58,7 +64,8 @@
           </el-table-column>
           <el-table-column
             label="操作">
-            冻结   激活
+            <span style="margin-right: 10px;">冻结</span>
+            <span>激活</span>
           </el-table-column>
         </el-table>
     </div>
@@ -98,6 +105,7 @@
                   <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="提交日期:">
                      <span>{{ props.row.submitTime }}</span>
                    </el-form-item></div></el-col>
+
                    <el-col :span="24"><div class="grid-content bg-purple"><el-form-item label="企业地址:">
                    <span>{{ props.row.address }}</span>
                  </el-form-item></div></el-col>
@@ -250,7 +258,7 @@
                 <el-col :span="5">本月绩效基数</el-col>
                 <el-col :span="4">本月提现金额</el-col>
               </div>
-              <div v-for="item in props.row.two" style="width: 80%;margin: 0 auto;text-align: center;font-size: 12px;">
+              <div v-for="item in props.row.two" style="line-height: 25px;width: 80%;margin: 0 auto;text-align: center;font-size: 12px;">
                 <el-col :span="4">{{item.riqi}}</el-col>
                 <el-col :span="4">{{item.leiji}}</el-col>
                 <el-col :span="4">{{item.youxiao}}</el-col>
@@ -270,7 +278,7 @@
             prop="numberId">
           </el-table-column>
           <el-table-column
-            width="220px"
+            width="150px"
             label="姓名"
             prop="name">
           </el-table-column>
@@ -307,7 +315,7 @@
     props:['listArr', 'showDiv'],
     data() {
       return {
-        
+
       }
     },
     methods: {
@@ -318,7 +326,7 @@
 
 <style>
   .list_box .el-form-item {
-    min-width:200px ;
+    min-width:200px;
     margin-bottom: 0;
   }
 </style>

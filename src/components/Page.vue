@@ -23,11 +23,9 @@
     methods: {
       handleSizeChange(e) {
         //console.log(`每页 ${val} 条`);
-        console.log(e)
       },
       handleCurrentChange(e) {
         // console.log(`当前页: ${val}`);
-        console.log(e)
       }
     }
   }
