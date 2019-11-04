@@ -36,11 +36,6 @@ module.exports = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'babel-loader',
-      //   include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
-      // },
 	  {
 	    test: /\.js$/,
 	    exclude: /(node_modules|bower_components)/,
@@ -56,7 +51,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: utils.assetsPath('img/[name].[ext]')
         }
       },
       {

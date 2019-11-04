@@ -10,6 +10,8 @@ const UserOrder = () => import('../views/Order/userorder');
 const Detail = () => import('../views/Order/detail');
 // 审核中心
 const Review = () => import('../views/Review/review');
+// 审核中心详情页
+const ReviewDetail = () => import('../views/Review/reviewdetail');
 
 
 // 1.安装插件
@@ -29,8 +31,8 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   {
     path: '',
-    name: UserOrder,
-    redirect: '/order/user/detail'
+    name: ReviewDetail,
+    redirect: '/reviewdetail'
   },
   {
     // 首页
@@ -54,13 +56,15 @@ const routes = [
   {
     path:'/review',
     name:Review,
-    meta:{title:'审核中心'}
+    component: Review,
+    meta:{title:'审核中心'},
+    children: [{
+     path: 'reviewdetail',
+     name: ReviewDetail,
+     component: ReviewDetail,
+     meta: { title: '查看详情' }
+    }]
   },
-  // {
-  //   // 订单管理--用户订单
-  //   path:'/order/detail',
-  //   component: Detail
-  // },
   {
     // 小程序--业务员
     path:'/applets/salesman',
@@ -73,7 +77,7 @@ const routes = [
 ]
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'hash'
 })
 
 

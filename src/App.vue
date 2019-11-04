@@ -1,96 +1,127 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header style="height: 100px;">
-        <el-row>
-          <el-col :span="10"><img class="logo" src="@/assets/logo.png" alt="" /></el-col>
-          <el-col :span="4"><h3 class="header_title">鹰洋国际后台管理系统</h3></el-col>
-          <el-col :span="10">
-            <div class="header_right">
-              <div class="header_right_out">退出</div>
-              <div class="header_right_info">
-                <span>员工姓名：XXX</span>
-                <span>员工编号：XXX</span>
-                <span>部门：XXX</span>
-                <span>平台账号：XXX</span>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-      <el-header class="main_header">
-        <router-link to="/index"><span class="header_index">首页</span></router-link>
-        <el-dropdown :show-timeout="1" v-for="(item, index) in nav" class="main_header_nav" @command="handleCommand">
-          <span class="el-dropdown-link main_header_nav_title">{{ item.title }}</span>
-          <el-dropdown-menu class="main_header_nav_hover" slot="dropdown">
-            <el-dropdown-item v-for="(twoItem, twoIndex) in item.two" :command="{ oneTitle: item.title, twoTitle: twoItem.title, path: twoItem.path, img:twoItem.img }">
-              {{ twoItem.title }}
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-header>
-      <el-container class='view_container1'>
-        <el-aside width="180px">
-          <div class="left_title">
-            <div class="left_row_img">
-              <img style="width: 100%;height: 100%;" src="@/assets/leftBigImg/MyToDo.png" alt="">
-            </div>
-            <div class="left_row_title">我的待办</div>
-          </div>
-          <div class="left_commonly_used">
-            <div class="commonly_title">
-              常用设置
-              <span>
-                <img src="" alt="">
-              </span>
-            </div>
-            <div class="history_one"  v-for="item in commonlyUsed">
-              <div class="commonly_img">
-                <img :src="item.src" style="width: 100%;height: 100%;" alt="">
-              </div>
-              <div>
-                {{item.title}}
-              </div>
-            </div>
+    <div v-if="!homeShow" class="app_login">
+      <el-form ref="form" :model="formData" label-width="80px">
+        <el-form-item label="账号:">
+          <el-input v-model="formData.user"></el-input>
+        </el-form-item>
+        <el-form-item label="密码:">
+          <el-input type="password" v-model="formData.pwd"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button>取消</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 
-          </div>
-          <div class="left_history">
-            <div class="history_title">
-              历史操作
+    <div v-if="homeShow" class="app_home">
+      <el-container>
+        <el-header style="height: 100px;">
+          <el-row>
+            <el-col :span="10"><img class="logo" src="@/assets/logo.png" alt="" /></el-col>
+            <el-col :span="4"><h3 class="header_title">鹰洋国际后台管理系统</h3></el-col>
+            <el-col :span="10">
+              <div class="header_right">
+                <div @click="outLogin" class="header_right_out">退出</div>
+                <div class="header_right_info">
+                  <span>员工姓名：XXX</span>
+                  <span>员工编号：XXX</span>
+                  <span>部门：XXX</span>
+                  <span>平台账号：XXX</span>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-header>
+        <el-header class="main_header">
+          <router-link to="/index"><span class="header_index">首页</span></router-link>
+          <el-dropdown :show-timeout="1" v-for="(item, index) in nav" class="main_header_nav" @command="handleCommand">
+            <span class="el-dropdown-link main_header_nav_title">{{ item.title }}</span>
+            <el-dropdown-menu class="main_header_nav_hover" slot="dropdown">
+              <el-dropdown-item v-for="(twoItem, twoIndex) in item.sub" :command="{ oneTitle: item.title, twoTitle: twoItem.title, path: twoItem.path, img:twoItem.thumb }">
+                {{ twoItem.title }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-header>
+        <el-container class='view_container1'>
+          <el-aside width="180px">
+            <div class="left_title">
+              <div class="left_row_img">
+                <img style="width: 100%;height: 100%;" src="@/assets/leftBigImg/MyToDo.png" alt="">
+              </div>
+              <div class="left_row_title">我的待办</div>
             </div>
-            <div class="history_one" @click="historyClick(item.path)" v-for="item in history">
+            <div class="left_commonly_used">
+              <div class="commonly_title">
+                常用设置
+                <span>
+                  <img src="" alt="">
+                </span>
+              </div>
+              <div class="history_one"  v-for="item in commonlyUsed">
+                <div class="commonly_img">
+                  <img :src="item.src" style="width: 100%;height: 100%;" alt="">
+                </div>
+                <div>
+                  {{item.title}}
+                </div>
+              </div>
 
-              <div class="history_img">
-                <img :src="item.src" style="width: 100%;height: 100%;" alt="">
+            </div>
+            <div class="left_history">
+              <div class="history_title">
+                历史操作
               </div>
-              <div >
-                {{item.title}}
+              <div class="history_one" @click="historyClick(item.path)" v-for="item in history">
+
+                <div class="history_img">
+                  <img :src="'static/img'+item.src" style="width: 100%;height: 100%;" alt="">
+                </div>
+                <div >
+                  {{item.title}}
+                </div>
               </div>
             </div>
-          </div>
-        </el-aside>
-        <el-main>
-          <el-container class="view_container">
-            <div class="view_container_head">
-              <breadList />
+          </el-aside>
+          <el-main>
+            <el-container class="view_container">
+              <div class="view_container_head">
+                <breadList />
+              </div>
+            </el-container>
+            <div class="app_view">
+              <!-- 视口占位 -->
+              <router-view />
             </div>
-          </el-container>
-          <div class="app_view">
-            <!-- 视口占位 -->
-            <router-view />
+          </el-main>
+        </el-container>
+
+        <el-footer style="background: #6BAEF3;text-align: center;line-height: 60px;color: white;">
+          <div>
+            深圳（前海）鹰洋国际贸易有限公司  粤ICP备17118012号
           </div>
-        </el-main>
+        </el-footer>
       </el-container>
-    </el-container>
+    </div>
   </div>
 </template>
 
 <script>
+  import {request} from './network/request'
   import breadList from './components/breadcrumb'
 export default {
   name: 'App',
   data() {
     return {
+      token:'',
+      // 登录页面显示
+      homeShow:false,
+      formData:{
+        user:'',
+        pwd:''
+      },
       // 常用功能
       commonlyUsed: [{
         title:'消息管理',
@@ -109,126 +140,7 @@ export default {
       // 历史操作
       history: [],
       breadcrumb: [],
-      nav: [
-        {
-          title: '订单管理',
-          two: [
-            {
-              title: '用户订单',
-              path: '/order/user',
-              img:require('@/assets/leftBigImg/userOrder.png')
-            },
-            {
-              title: '商家订单',
-              path: '/order/merchant'
-            },
-            {
-              title: '翻译管理',
-              path: '/order/translation'
-            }
-          ]
-        },
-        {
-          title: '审核中心',
-          two: [
-            {
-              title: '审核中心',
-              path: '/review',
-              img:require('@/assets/leftBigImg/salesman.png')
-            }
-          ]
-        },
-        {
-          title: '商城管理',
-          two: [
-            {
-              title: '商品管理',
-              path: '/mall/commodity'
-            },
-            {
-              title: '分类管理',
-              path: '/mall/classifica'
-            },
-            {
-              title: '反馈中心',
-              path: '/mall/feedback'
-            }
-          ]
-        },
-        {
-          title: '用户管理',
-          two: [
-            {
-              title: '用户管理',
-              path: '/usermanagement/management'
-            },
-            {
-              title: '商家管理',
-              path: '/usermanagement/merchant'
-            }
-          ]
-        },
-        {
-          title: '综合管理',
-          two: [
-            {
-              title: '权限设置',
-              path: '/comprehensive/permission'
-            },
-            {
-              title: '消息管理',
-              path: '/comprehensive/message'
-            },
-            {
-              title: '促销活动',
-              path: '/comprehensive/promotion'
-            },
-            {
-              title: '个人中心',
-              path: '/comprehensive/personal'
-            },
-            {
-              title: '协议管理',
-              path: '/comprehensive/protocol'
-            },
-            {
-              title: '统计中心',
-              path: '/comprehensive/statistics'
-            },
-            {
-              title: '财务中心',
-              path: '/comprehensive/finance'
-            }
-          ]
-        },
-        {
-          title: '小程序',
-          two: [
-            {
-              title: '商家管理',
-              path: '/applets/merchant'
-            },
-            {
-              title: '公众号',
-              path: '/applets/public'
-            },
-            {
-              title: '业务员',
-              path: '/applets/salesman',
-              img:require('@/assets/leftBigImg/salesman.png')
-            }
-          ]
-        },
-        {
-          title: '第三方',
-          two: [
-            {
-              title: '运输清关',
-              path: '/third/transport'
-            }
-          ]
-        }
-      ]
+      nav: []
     };
   },
   components: {
@@ -240,8 +152,48 @@ export default {
       this.history = history;
     }
 
+    // 是否已登录
+    const nav =JSON.parse(localStorage.getItem('nav'));
+    if(nav){
+      this.nav = nav;
+    }
+    const token =localStorage.getItem('token');
+    if(token){
+      this.homeShow = true;
+    }
+
   },
   methods: {
+    // 登录
+    onSubmit() {
+      request({
+        url:'/admin/PublicOperate/login',
+        method:'post',
+        data:{
+          username:this.formData.user,
+          password:this.formData.pwd
+        }
+      }).then(res => {
+       if(res.error === 0) {
+          this.homeShow = true;
+          localStorage.setItem('token',res.data.token)
+          this.token = res.data.token;
+          localStorage.setItem('nav',JSON.stringify(res.data.auth))
+          this.nav = res.data.auth;
+        }else {
+          alert(res.message)
+        }
+      })
+    },
+    // 退出登录
+    outLogin() {
+       this.homeShow = false;
+
+       localStorage.removeItem('token');
+       localStorage.removeItem('nav');
+       localStorage.removeItem('history');
+    },
+    // 路由跳转
     handleCommand(e) {
       //console.log(this.$route.meta)
       const path = e.path;
@@ -253,8 +205,6 @@ export default {
       if(arr1.length > 0){
         // 遍历判断是否有相同的
         for(let i = 0; i < arr1.length; i++) {
-          console.log(arr1[i].title)
-          console.log(e.twoTitle)
           if(arr1[i].title == e.twoTitle){
             // 删除相同的
             arr1.splice(i,1)
@@ -396,6 +346,7 @@ a {
 .header_right_out {
   text-align: right;
   margin-top: 20px;
+  cursor: pointer;
 }
 
 .header_right_info {
@@ -502,5 +453,14 @@ tbody .cell {
 .history_title {
   text-align: center;
   padding: 10px 0;
+}
+
+.app_login {
+  width: 500px;
+  padding: 20px 40px;
+  height: 200px;
+  background: #009FE9;
+  border-radius: 5px;
+  margin: 50px auto;
 }
 </style>

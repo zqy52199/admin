@@ -1,11 +1,11 @@
 <template>
   <div id="salesman">
      <div class="contaiter_box">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="基本资料" name="tableData">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="1"></Search>
+            <Search :showInput="1" @searchCon="tableDataSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -13,13 +13,13 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page></Page>
+            <Page @table="table2" :count="tableDataCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="商家推广" name="merchantInfo">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="2"></Search>
+            <Search :showInput="2"  @searchCon="merchantInfoSearch" :datas="datas"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -27,13 +27,13 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page></Page>
+            <Page @merchant="merchant2" :count="merchantInfoCount"></Page>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="审核记录" name="auditRecord">
+        <el-tab-pane label="推荐审核" name="auditRecord">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="3"></Search>
+            <Search :showInput="3" @searchCon="auditRecordSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -41,13 +41,13 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page></Page>
+            <Page @audit="audit2" :count="auditRecordCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="提现申请" name="withdraw">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="4"></Search>
+            <Search :showInput="4" @searchCon="withdrawSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -55,21 +55,21 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page></Page>
+            <Page @withdraw="withdraw2" :count="withdrawCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="推广业绩" name="performance">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="5"></Search>
+            <Search :showInput="5"  @searchCon="performanceSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
-            <List :listArr="performance" :showDiv="5"></List>
+            <List :listArr="performance" :showDiv="5" :performanceTow="performanceTow" ></List>
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page></Page>
+            <Page  @performance="performance2" :count="performanceCount"></Page>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -82,169 +82,32 @@
 import List from '@/components/applets/List';
 import Page from '@/components/Page';
 import Search from '@/components/applets/Search';
+import {request} from "@/network/request";
 export default {
   name: 'salesman',
 
   data() {
     return {
-
       activeName: 'tableData',
+      // 分类
+      datas:[],
+      // 推广业绩 - 详细信息
+      performanceTow:[],
       // 推广业绩
-      performance: [{
-                   id:1,
-                   numberId: '兼职编号',
-                   name:'中期有',
-                   zhuceriqi: '2019-10-20',
-                   leijituiguang: '累计推广',
-                   leijiyouxiaotuiguang: '累计有效推广',
-                   leijitixian: '累计提现',
-                   two:[
-                     {riqi:'2018-20-24',leiji:'累计推广',youxiao:'有效推广',jixiao:'本月绩效基数',tixian:'本月提现'},
-                     {riqi:'2018-20-25',leiji:'累计推广',youxiao:'有效推广',jixiao:'本月绩效基数',tixian:'本月提现'},
-                     {riqi:'2018-20-26',leiji:'累计推广',youxiao:'有效推广',jixiao:'本月绩效基数',tixian:'本月提现'},
-                     {riqi:'2018-20-27',leiji:'累计推广',youxiao:'有效推广',jixiao:'本月绩效基数',tixian:'本月提现'},
-                     {riqi:'2018-20-28',leiji:'累计推广',youxiao:'有效推广',jixiao:'本月绩效基数',tixian:'本月提现'}
-                   ]
-                   }],
+      performance: [],
+      performanceCount: 0,
        // 提现申请
-      withdraw: [{
-                    id:1,
-                    numberId: '兼职编号',
-                    name:'中期有',
-                    tixian: '支付宝',
-                    tixianzhanghao: '提现账号',
-                    tixianjinge: '提现金额',
-                    shenqingshijian: '2019-10-22',
-                    status: 0
-                }],
+      withdraw: [],
+      withdrawCount: 0,
       // 审核记录
-      auditRecord: [{
-                    id:1,
-                    numberId: '兼职编号',
-                    qiyemingcheng: '企业名称',
-                    registerType: 0,
-                    releaseType: 1,
-                    operat:0
-                    },
-                    {
-                     id:2,
-                     numberId: '兼职编号',
-                     qiyemingcheng: '企业名称',
-                     registerType: 1,
-                     releaseType: 0,
-                     operat:1
-                    },{
-                      id:3,
-                      numberId: '兼职编号',
-                      qiyemingcheng: '企业名称',
-                      registerType: 0,
-                      releaseType: 1,
-                      operat:2
-                    }],
+      auditRecord: [],
+      auditRecordCount: 0,
       // 商家推广
-      merchantInfo:[{
-                  id: '1',
-                  qiyemingcheng: '企业名称',
-                  operat: '操作',
-                  address:'哥伦比亚大学门口',
-                  suozaidiqu: '所在地区',
-                  card: '4408888888888888888',
-                  bank: '3546316516351613111',
-                  fixedTelephone: '07556242355',
-                  faRen: '中秋又',
-                  jinyingpinglei:'衣服、上衣、裤子',
-                  type: '0',
-                  submitTime: '2019/9/28',
-                  numberId: '兼职编码',
-                  xinyongdaima: '信用代码',
-                  tuijianqudao: '推荐渠道',
-                  lianxizhengm: '联系证明记录图片'
-                },{
-                  id: '2',
-                  qiyemingcheng: '企业名称',
-                  operat: '操作',
-                  address:'哥伦比亚大学门口',
-                  suozaidiqu: '所在地区',
-                  card: '4408888888888888888',
-                  bank: '3546316516351613111',
-                  fixedTelephone: '07556242355',
-                  faRen: '中秋又',
-                  jinyingpinglei:'衣服、上衣、裤子',
-                  type: '1',
-                  submitTime: '2019/9/28',
-                  numberId: '兼职编码',
-                  xinyongdaima: '信用代码',
-                  tuijianqudao: '推荐渠道',
-                  lianxizhengm: '联系证明记录图片'
-                }],
+      merchantInfo:[],
+      merchantInfoCount:0,
       // 基本资料
-      tableData: [{
-                id: '1',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              },{
-                id: '2',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              },{
-                id: '2',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              },{
-                id: '2',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              },{
-                id: '2',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              },{
-                id: '2',
-                name: '小哥哥',
-                operat: '操作',
-                address:'哥伦比亚大学门口',
-                card: '4408888888888888888',
-                bank: '3546316516351613111',
-                phone: '13325213252',
-                wechat: 'zhongqiyou',
-                numberId: '10333',
-                addTime:'2019-10-23'
-              }]
+      tableData: [],
+      tableDataCount: 0
 
     }
   },
@@ -253,12 +116,124 @@ export default {
       Page,
       Search
   },
+  mounted() {
+    // 业务员基本信息
+    this.publisFn('/admin/Smallprogram/salesmanList', 1);
+    // 商家推广
+    this.publisFn('/admin/Smallprogram/merchantList', 2);
+    // 推荐审核
+    this.publisFn('/admin/Smallprogram/merchantExamineList', 3);
+    // 提现申请
+    this.publisFn('/admin/Smallprogram/withdrawalsList', 4);
+    // 推广业绩
+    this.publisFn('/admin/Smallprogram/performanceList', 5);
+  },
   methods: {
+    table2(e) {
+      this.chackFn(e, '10', '/admin/Smallprogram/salesmanList', 1)
+    },
+    // 商家推广
+    merchant2(e) {
+      this.chackFn(e, '10', '/admin/Smallprogram/merchantList', 2)
+    },
+    // 审核记录
+      audit2(e) {
+      this.chackFn(e, '10', '/admin/Smallprogram/merchantExamineList', 3)
+    },
+    // 提现申请
+    withdraw2(e) {
+      this.chackFn(e, '10', '/admin/Smallprogram/withdrawalsList', 4)
+    },
+    // 推广业绩
+    performance2(e) {
+      this.chackFn(e, '10', '/admin/Smallprogram/performanceList', 5)
+    },
+    // 获取内容
+    publisFn(url, obj) {
+      const getToken = localStorage.getItem('token');
+      request({
+        url,
+        data:{
+          token:getToken
+        },
+        method:'post',
+      }).then(res => {
+        let data = res.data;
+        let nums = res.nums;
+        if(obj === 1) {
+          this.tableData = data;
+          this.tableDataCount = nums;
+        }else if(obj === 2) {
+          this.merchantInfo = data;
+          this.merchantInfoCount = nums;
+        }else if(obj === 3) {
+          this.auditRecord = data;
+          this.auditRecordCount = nums;
+        }else if(obj === 4) {
+          this.withdraw = data;
+          this.withdrawCount = nums;
+        }else if(obj === 5) {
+          this.performance = data;
+          this.performanceCount = nums;
+        }
 
+      })
+    },
+    // 查询内容
+    chackFn(page, count, url, obj) {
+      const getToken = localStorage.getItem('token');
+      request({
+        url,
+        data: {
+          page,
+          count,
+          token:getToken
+        },
+        method:'post'
+      }).then(res => {
+        let data = res.data;
+        let nums = res.nums;
+        if(obj === 1) {
+          this.tableData = data;
+          this.tableDataCount = nums;
+        }else if(obj === 2) {
+          this.merchantInfo = data;
+          this.merchantInfoCount = nums;
+        }else if(obj === 3) {
+          this.auditRecord = data;
+          this.auditRecordCount = nums;
+        }else if(obj === 4) {
+          this.withdraw = data;
+          this.withdrawCount = nums;
+        }else if(obj === 5) {
+          this.performance = data;
+          this.performanceCount = nums;
+        }
+      })
+    },
 
-    handleClick(e) {
-      console.log(e)
+    // 接受组件search返回的内容
+    // 基本资料
+    tableDataSearch(e) {
+      this.tableData = e;
+    },
+    // 商家推广
+    merchantInfoSearch(e) {
+      this.merchantInfo = e;
+    },
+    // 推荐审核
+    auditRecordSearch(e) {
+      this.auditRecord = e;
+    },
+    // 提现审核
+    withdrawSearch(e) {
+      this.withdraw = e;
+    },
+    // 推广业绩
+    performanceSearch(e) {
+      this.performance = e;
     }
+
   }
 };
 </script>

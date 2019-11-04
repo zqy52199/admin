@@ -35,6 +35,8 @@
                 matched=[{ path: 'salesman', meta: { title: '小程序' }}].concat(matched)
               }else if(first.path =='/order/user') {
                 matched=[{ path: 'user', meta: { title: '订单管理' }}].concat(matched)
+              }else if(first.path =='/review') {
+                matched=[{ path: 'review', meta: { title: '审核中心' }}].concat(matched)
               }
             }
 

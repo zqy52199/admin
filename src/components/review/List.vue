@@ -4,8 +4,8 @@
           :data="listArr"
           style="width: 100%">
           <el-table-column
-            prop="orderId"
-            label="订单编号"
+            prop="menberAccount"
+            label="商家账号"
             width="180">
           </el-table-column>
           <el-table-column
@@ -14,29 +14,28 @@
             width="180">
           </el-table-column>
           <el-table-column
-            prop="orderTime"
-            label="下单时间">
+            prop="orderStatus"
+            label="审核类别">
           </el-table-column>
           <el-table-column
-            prop="buyerAccount"
-            label="买家账号"
+            prop="applicationTime"
+            label="申请时间"
             width="180">
           </el-table-column>
           <el-table-column
-            prop="paymentMethod"
-            label="付款方式">
-          </el-table-column>
-          <el-table-column
-            prop="orderStatus"
-            label="订单状态"
-            width="150">
+            prop="orderType"
+            label="审核状态">
+              <template scope="scope">
+                <span v-if="scope.row.orderType==1">待审核</span>
+                <span v-if="scope.row.orderType==2">已拒绝</span>
+                <span style="color: #0BB908;" v-if="scope.row.orderType==3">已通过</span>
+              </template>
           </el-table-column>
           <el-table-column
             prop="operat"
             label="操作">
-           <router-link to="/order/user/detail"><span style="color: #0000FF;cursor: pointer;">查看详情</span></router-link>
-            &nbsp;&nbsp;
-            <span style="color: #ff2951;cursor: pointer;">关闭订单</span>
+           <router-link to="/review/reviewdetail"><span style="color: #0000FF;cursor: pointer;">查看详情</span></router-link>
+
           </el-table-column>
         </el-table>
   </div>
@@ -57,7 +56,7 @@
       }
     },
     methods: {
-      
+
     }
   }
 </script>

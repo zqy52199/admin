@@ -2,12 +2,11 @@
   <div id="page" class="box_block">
        <!-- 分页组件 -->
        <el-pagination
-         @size-change="handleSizeChange"
          @current-change="handleCurrentChange"
          :current-page="currentPage"
          :page-sizes="[10]"
          layout="total, sizes, prev, pager, next, jumper"
-         :total="100">
+         :total="count">
        </el-pagination>
   </div>
 </template>
@@ -15,17 +14,30 @@
 <script>
   export default {
     name: 'page',
+    props:{
+      count:{
+        type:Number,
+        default:10
+      }
+    },
     data() {
       return {
         currentPage: 1
       }
     },
     methods: {
-      handleSizeChange(e) {
-        //console.log(`每页 ${val} 条`);
-      },
       handleCurrentChange(e) {
-        // console.log(`当前页: ${val}`);
+         console.log(`当前页: ${e}`);
+         // 基本资料
+         this.$emit('table',e);
+          // 商家推广
+         this.$emit('merchant',e);
+         // 审核记录
+         this.$emit('audit',e);
+         // 提现申请
+         this.$emit('withdraw',e);
+          // 推广业绩
+         this.$emit('performance',e);
       }
     }
   }
