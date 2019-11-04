@@ -68,11 +68,19 @@
           <el-table-column
             label="操作">
             <template slot-scope="scope">
-              <span @click="freeze(scope.row.uid, '0')" style="cursor: pointer;color: #2592ff;">
+              <span v-if="scope.row.status == 0" >
                 冻结
               </span>
+              <span v-else @click="freeze(scope.row.uid, scope.row.status, scope.$index)" :style="scope.row.status == 1? 'cursor: pointer;color: #2592ff;' : '' ">
+                冻结
+              </span>
+
               &nbsp;&nbsp;
-              <span  @click="freeze(scope.row.uid, '1')" style="cursor: pointer;">激活</span>
+
+              <span v-if="scope.row.status == 1" >
+                激活
+              </span>
+              <span v-else @click="freeze(scope.row.uid, scope.row.status, scope.$index)" :style="scope.row.status == 0? 'cursor: pointer;color: #2592ff;' : 'cursor: pointer;' ">激活</span>
             </template>
 
           </el-table-column>
@@ -167,7 +175,7 @@
 
 
     </div>
-    <!-- 审核记录列表 -->
+    <!-- 推荐商家审核列表 -->
     <div v-if="showDiv == 3" class="box3">
       <el-table
           :data="tempListArr"
@@ -194,7 +202,7 @@
             <template scope="scope">
               <span>{{scope.row.isreg==0?'否':'是'}}</span>
               <span style="color:blue;margin-left:20px;cursor:pointer">查看</span>
-              <span v-if="scope.row.isreg == 0"><el-button @click="tempClick(scope.row.mid, scope.row.isreg, 2)" size="mini"type="danger">注册</el-button></span>
+              <span v-if="scope.row.isreg == 0"><el-button @click="tempClick(scope.row.mid, scope.row.isreg, 2, scope.$index)" size="mini"type="danger">注册</el-button></span>
             </template>
           </el-table-column>
           <el-table-column
@@ -202,13 +210,13 @@
             <template scope="scope">
               <span>{{scope.row.isrelease==0?'否':'是'}}</span>
               <span style="color:blue;margin-left:20px;cursor:pointer">查看</span>
-              <span v-if="scope.row.isrelease == 0"><el-button @click="tempClick(scope.row.mid, scope.row.isreg, 3)" size="mini"type="danger">发布</el-button></span>
+              <span v-if="scope.row.isrelease == 0"><el-button @click="tempClick(scope.row.mid, scope.row.isrelease, 3, scope.$index)" size="mini"type="danger">发布</el-button></span>
             </template>
           </el-table-column>
           <el-table-column
           label="操作">
           <template scope="scope">
-            <span v-if='scope.row.status === 0'>
+            <span v-if='scope.row.isrelease==1 && scope.row.isreg==1 && scope.row.status==0'>
               <el-button @click="by(scope.row.mid,1,scope.$index)" size="mini" type="success">通过</el-button>
               <el-button @click="by(scope.row.mid,2,scope.$index)" size="mini" type="danger">拒绝</el-button>
             </span>
@@ -359,8 +367,8 @@
     },
     methods: {
       // 临时接口
-      tempClick(mid, status, type) {
-        
+      tempClick(mid, status, type, index) {
+
         request({
           url:'/admin/Smallprogram/examinetest',
           method:'post',
@@ -369,21 +377,27 @@
             type,
             status
           }
-        })
+        }).then(res => {
+			alert(res.message)
+      if(type ==2) {
+        this.tempListArr[index].isreg = 1;
+      }else {
+        this.tempListArr[index].isrelease = 1;
+      }
+		})
       },
       //基本资料-- 冻结  激活
-      freeze(uid, status) {
-        
+      freeze(uid, status, index) {
+        let sta = status == 0? 1 : 0;
         request({
           url:'/admin/Smallprogram/changeStatus',
           method:'post',
           data:{
-            uid,
-            status
+            uid
           }
         }).then(res => {
            alert(res.message)
-
+          this.tempListArr[index].status = sta;
 
         })
       },
@@ -415,6 +429,7 @@
          this.tempListArr[index].status = 1;
         })
       }
+
     },
     watch:{
         listArr:function(val){
@@ -437,5 +452,13 @@
     margin-left: 20px;
     margin-bottom: 20px;
     float: left;
+  }
+
+  .el-table tr.expanded{
+    background: #dfeefd;
+  }
+
+  .el-table tr td.el-table__expanded-cell {
+    background: #f3f8ff;
   }
 </style>

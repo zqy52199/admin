@@ -17,7 +17,7 @@
         <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
         <el-form-item >
           <span class="demonstration">经营品类: </span>
-          <el-cascader v-model="value" :options="options" :props="{ expandTrigger: 'hover' }"></el-cascader>
+          <el-cascader v-model="value" :options="datas" :props="{ expandTrigger: 'hover' }"></el-cascader>
         </el-form-item>
 		<el-form-item class="shenTime" label="申请时间:">
 		  <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
@@ -36,6 +36,7 @@
         <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
         <el-form-item label="审核状态:">
           <el-select v-model="formInline.status" filterable placeholder="请选择">
+            <el-option label="请选择" value=""></el-option>
             <el-option label="待审核" value="0"></el-option>
             <el-option label="已通过" value="1"></el-option>
             <el-option label="已拒绝" value="2"></el-option>
@@ -54,6 +55,7 @@
         <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
         <el-form-item style="margin-right: 50px;" label="提现方式:">
           <el-select v-model="formInline.payment" filterable placeholder="请选择">
+            <el-option label="请选择" value=""></el-option>
             <el-option label="银行转账" value="1"></el-option>
             <el-option label="支付宝" value="2"></el-option>
           </el-select>
@@ -124,6 +126,7 @@
           </el-form-item>
           <el-form-item label="排序:">
             <el-select v-model="formInline.sorts" filterable placeholder="请选择">
+              <el-option label="请选择" value=""></el-option>
               <el-option label="累计提交推广" value="1"></el-option>
               <el-option label="累计有效推广" value="2"></el-option>
               <el-option label="累计提现金额" value="3"></el-option>
@@ -144,7 +147,7 @@
   import {request} from '@/network/request';
 export default {
   name: 'search',
-  props:['showInput'],
+  props:['showInput', 'datas'],
   data() {
     return {
       pickerOptions: {
@@ -155,11 +158,11 @@ export default {
       // 查询内容
       formInline: {
         // 查询状态：待处理--0   已拒绝--2  已同意--1
-        status: '0',
+        status: '',
         // 查询状态：支付宝--2   银行转账--1
-        payment: '1',
+        payment: '',
         // 累计排序: 累计推广--1  累计有效推广--2 累计提现--3
-        sorts: '1',
+        sorts: '',
         numberId: '',
         companyName: '',
         name: '',
@@ -172,9 +175,7 @@ export default {
 
       },
       value: [],
-      tempAutoTime: '',
-      // 分类内容
-      options: []
+      tempAutoTime: ''
     };
   },
   methods: {
@@ -260,7 +261,7 @@ export default {
       }else if(e === 3) {
         this.formInline.numberId = '';
         this.formInline.companyName = '';
-        this.formInline.status = '0';
+        this.formInline.status = '';
       }else if(e === 4) {
         this.formInline.numberId = '';        //#兼职编号
         this.formInline.name = '';          //#姓名
@@ -276,49 +277,11 @@ export default {
           this.formInline.endNum = '';
           this.formInline.minPrice = '';
           this.formInline.maxPrice = '';
-          this.formInline.sorts = '';
           this.formInline.sorts = '';       //#排序 1.累计提交推广数  2.累计有效推广数  3.累计提现金额
       }
-      
+
       this.onSubmit(e);
     }
-
-  },
-  mounted() {
-      // 商品分类级联
-      request({
-        url:'/admin/Smallprogram/category',
-        method:'post'
-      }).then(res => {
-        const resData = res.data;
-        let datas = [];
-
-        for(let i = 0; i < resData.length; i++) {
-          let obj = {};
-          obj.value = resData[i].Pid;
-          obj.label = resData[i].Name_lang_1;
-          obj.children = [];
-
-          let resDataTwo = resData[i].two;
-          for(let j = 0; j < resDataTwo.length; j++) {
-            let obj1 = {};
-            obj1.value = resDataTwo[j].Pid;
-            obj1.label = resDataTwo[j].Name_lang_1;
-            obj1.children = [];
-
-            let resDataThree = resDataTwo[j].three;
-            for(let k = 0 ; k < resDataThree.length; k++ ){
-              let obj2 = {};
-              obj2.value = resDataThree[k].CateId;
-              obj2.label = resDataThree[k].Name_lang_1;
-              obj1.children.push(obj2);
-            }
-            obj.children.push(obj1);
-          }
-          datas.push(obj);
-        }
-        this.options = datas;
-      })
 
   },
   watch: {

@@ -2,12 +2,16 @@ import axios from 'axios'
 export function request(config) {
   // 1.创建axios的实例
   const instance = axios.create({
-    baseURL: 'http://192.168.1.118:88/index.php',
+    // 线上 https://vx.eaglesell.com.cn/
+    // 线下 http://192.168.1.118:88
+    baseURL: 'https://vx.eaglesell.com.cn/index.php',
     timeout: 5000
   })
   // 全局需要的token
-  config.data.token = localStorage.getItem('token');
-  
+  if(config.data) {
+    config.data.token = localStorage.getItem('token');
+  }
+
   instance.interceptors.request.use((config) => {
     if(config.method  === 'post'){
       config.data = JSON.stringify(config.data);

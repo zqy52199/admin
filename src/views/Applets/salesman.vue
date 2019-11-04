@@ -107,7 +107,10 @@ export default {
       merchantInfoCount:0,
       // 基本资料
       tableData: [],
-      tableDataCount: 0
+      tableDataCount: 0,
+
+      // 分类信息
+      options:[]
 
     }
   },
@@ -117,6 +120,7 @@ export default {
       Search
   },
   mounted() {
+    this.getClassThree();
     // 业务员基本信息
     this.publisFn('/admin/Smallprogram/salesmanList', 1);
     // 商家推广
@@ -127,6 +131,7 @@ export default {
     this.publisFn('/admin/Smallprogram/withdrawalsList', 4);
     // 推广业绩
     this.publisFn('/admin/Smallprogram/performanceList', 5);
+
   },
   methods: {
     table2(e) {
@@ -150,13 +155,12 @@ export default {
     },
     // 获取内容
     publisFn(url, obj) {
-      const getToken = localStorage.getItem('token');
       request({
         url,
-        data:{
-          token:getToken
-        },
         method:'post',
+        data:{
+
+        }
       }).then(res => {
         let data = res.data;
         let nums = res.nums;
@@ -181,13 +185,14 @@ export default {
     },
     // 查询内容
     chackFn(page, count, url, obj) {
-      const getToken = localStorage.getItem('token');
       request({
         url,
         data: {
           page,
           count,
-          token:getToken
+          data:{
+
+          }
         },
         method:'post'
       }).then(res => {
@@ -210,6 +215,47 @@ export default {
           this.performanceCount = nums;
         }
       })
+
+    },
+    // 获取分类信息
+    getClassThree() {
+      request({
+                url:'/admin/Smallprogram/category',
+                method:'post',
+                data:{
+
+                }
+              }).then(res => {
+                const resData = res.data;
+                let datas = [];
+
+                for(let i = 0; i < resData.length; i++) {
+                  let obj = {};
+                  obj.value = resData[i].Pid;
+                  obj.label = resData[i].Name_lang_1;
+                  obj.children = [];
+
+                  let resDataTwo = resData[i].two;
+                  for(let j = 0; j < resDataTwo.length; j++) {
+                    let obj1 = {};
+                    obj1.value = resDataTwo[j].Pid;
+                    obj1.label = resDataTwo[j].Name_lang_1;
+                    obj1.children = [];
+
+                    let resDataThree = resDataTwo[j].three;
+                    for(let k = 0 ; k < resDataThree.length; k++ ){
+                      let obj2 = {};
+                      obj2.value = resDataThree[k].CateId;
+                      obj2.label = resDataThree[k].Name_lang_1;
+                      obj1.children.push(obj2);
+                    }
+                    obj.children.push(obj1);
+                  }
+                  datas.push(obj);
+                }
+                this.datas = datas;
+
+              })
     },
 
     // 接受组件search返回的内容
@@ -233,6 +279,7 @@ export default {
     performanceSearch(e) {
       this.performance = e;
     }
+
 
   }
 };
