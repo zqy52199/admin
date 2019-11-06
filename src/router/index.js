@@ -31,8 +31,8 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   {
     path: '',
-    name: ReviewDetail,
-    redirect: '/reviewdetail'
+    name: UserOrder,
+    redirect: '/userorder'
   },
   {
     // 首页

@@ -1,1 +1,1 @@
-export const baseURL = 'http://192.168.1.118:88'
+export const baseURL = 'https://vx.eaglesell.com.cn'

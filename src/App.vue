@@ -1,18 +1,20 @@
 <template>
-  <div id="app">
-    <div v-if="!homeShow" class="app_login">
-      <el-form ref="form" :model="formData" label-width="80px">
-        <el-form-item label="账号:">
-          <el-input v-model="formData.user"></el-input>
-        </el-form-item>
-        <el-form-item label="密码:">
-          <el-input type="password" v-model="formData.pwd"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">登录</el-button>
-          <el-button>取消</el-button>
-        </el-form-item>
-      </el-form>
+  <div id="app" style="height: 100%;width: 100%;">
+    <div v-if="!homeShow" class="app_login" :style="backgroundDiv">
+      <div class="app_login_box">
+        <el-form ref="form" :model="formData" label-width="80px">
+          <el-form-item label="账号:">
+            <el-input  placeholder="账号" v-model="formData.user"></el-input>
+          </el-form-item>
+          <el-form-item label="密码:">
+            <el-input type="password" placeholder="密码"  v-model="formData.pwd"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button style="width: 180px;"  type="primary" @click="onSubmit">登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
     </div>
 
     <div v-if="homeShow" class="app_home">
@@ -115,6 +117,11 @@ export default {
   name: 'App',
   data() {
     return {
+      backgroundDiv: {
+        backgroundImage: 'url(' + require('@/assets/adminBg.jpg') + ')',
+        width:"100%",
+        height:"100%",
+        backgroundSize:'cover'},
       token:'',
       // 登录页面显示
       homeShow:false,
@@ -233,6 +240,10 @@ export default {
 </script>
 
 <style>
+    html,body{
+               height: 100%;
+             }
+
 * {
   margin: 0;
   padding: 0;
@@ -246,7 +257,7 @@ a {
 }
 
 #app .el-tabs__item {
-  font-size: 12px;
+  font-size: 14px;
 }
 #app .app_view {
   margin: 10px;
@@ -456,11 +467,17 @@ tbody .cell {
 }
 
 .app_login {
-  width: 500px;
-  padding: 20px 40px;
-  height: 200px;
-  background: #009FE9;
-  border-radius: 5px;
-  margin: 50px auto;
+  width: 100%;
+  height: 100%;
+}
+
+.app_login_box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #FFFFFF;
+  padding: 50px;
+  padding-right: 100px;
 }
 </style>

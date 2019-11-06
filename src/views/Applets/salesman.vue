@@ -261,23 +261,29 @@ export default {
     // 接受组件search返回的内容
     // 基本资料
     tableDataSearch(e) {
-      this.tableData = e;
+    
+      this.tableData = e.data;
+      this.tableDataCount = e.nums;
     },
     // 商家推广
     merchantInfoSearch(e) {
-      this.merchantInfo = e;
+      this.merchantInfo = e.data;
+      this.merchantInfoCount = e.nums;
     },
     // 推荐审核
     auditRecordSearch(e) {
-      this.auditRecord = e;
+      this.auditRecord = e.data;
+      this.auditRecordCount = e.nums;
     },
     // 提现审核
     withdrawSearch(e) {
-      this.withdraw = e;
+      this.withdraw = e.data;
+      this.withdrawCount = e.nums;
     },
     // 推广业绩
     performanceSearch(e) {
-      this.performance = e;
+      this.performance = e.data;
+      this.performanceCount = e.nums;
     }
 
 

@@ -4,23 +4,24 @@
       <el-row>
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <el-form-item label="订单编号"><el-input v-model="formData.orderId" placeholder="请输入订单编号"></el-input></el-form-item>
+            <el-form-item label="订单编号:"><el-input v-model="formData.ordersn" placeholder="请输入订单编号"></el-input></el-form-item>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="grid-content">
-            <el-form-item label="商品名称"><el-input  v-model="formData.shopName" placeholder="请输入商品名称"></el-input></el-form-item>
+            <el-form-item label="商品名称:"><el-input v-model="formData.goodsname" placeholder="请输入商品名称"></el-input></el-form-item>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="grid-content">
-            <el-form-item label="买家账号"><el-input  v-model="formData.buyerAccount" placeholder="请输入买家账号"></el-input></el-form-item>
+            <el-form-item label="买家账号:"><el-input v-model="formData.username" placeholder="请输入买家账号"></el-input></el-form-item>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="grid-content">
-            <el-form-item label="订单状态">
-              <el-select v-model="formData.orderStatus" placeholder="请选择订单状态">
+            <el-form-item label="订单状态:">
+              <el-select v-model="formData.status" placeholder="请选择订单状态">
+                <el-option label="请选择" value=""></el-option>
                 <el-option label="未支付" value="1"></el-option>
                 <el-option label="待确认" value="2"></el-option>
                 <el-option label="待运输" value="3"></el-option>
@@ -32,9 +33,10 @@
         </el-col>
         <el-col :span="6">
           <div class="grid-content">
-            <el-form-item label="付款方式">
-              <el-select class="row_input" v-model="formData.paymentMethod" placeholder="请选择付款方式">
-                <el-option label="本地门店支付" value="0"></el-option>
+            <el-form-item label="付款方式:">
+              <el-select class="row_input" v-model="formData.payment" placeholder="请选择付款方式">
+                <el-option label="请选择" value=""></el-option>
+                <el-option label="门店支付" value="0"></el-option>
                 <el-option label="国际汇款" value="1"></el-option>
                 <el-option label="中国国内汇款" value="2"></el-option>
                 <el-option label="西联汇款" value="3"></el-option>
@@ -44,18 +46,18 @@
         </el-col>
         <el-col :span="9">
           <div class="grid-content">
-            <el-form-item label="下单时间">
-              <el-date-picker class="row_input" v-model="formData.startOrderTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
+            <el-form-item label="下单时间:">
+              <el-date-picker class="row_input" v-model="formData.start" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
               -
-              <el-date-picker class="row_input" v-model="formData.endOrderTime" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
+              <el-date-picker class="row_input" v-model="formData.end" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
             </el-form-item>
           </div>
         </el-col>
         <el-col :span="9">
           <div style="float: right;margin-right: 15px;">
             <el-form-item>
-              <el-button type="primary" size='small' @click="onSubmit">查询</el-button>
-              <el-button type="warning" size='small' native-type="reset">重置</el-button>
+              <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
+              <el-button type="warning" size="small" native-type="reset">重置</el-button>
             </el-form-item>
           </div>
         </el-col>
@@ -65,6 +67,7 @@
 </template>
 
 <script>
+import { request } from '@/network/request';
 export default {
   name: 'search',
   data() {
@@ -75,29 +78,38 @@ export default {
         }
       },
       formData: {
-        orderId: '',
-        shopName: '',
+        ordersn: '',
+        goodsname: '',
         // 订单状态  未支付--1  待确认--2  待运输--3  待收货--4  已完成--5
-        orderStatus: '',
-        startOrderTime: '',
-        endOrderTime: '',
+        status: '',
+        start: '',
+        end: '',
         // 买家账号
-        buyerAccount: '',
+        username: '',
         // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
-        paymentMethod: ''
+        payment: ''
       }
     };
   },
   methods: {
     onSubmit(e) {
-      console.log(e)
+      
+      request({
+        url: '/admin/orders/orderlist',
+        method: 'post',
+        data: this.formData
+      });
     }
   }
 };
 </script>
 
 <style>
-  #search .row_input {
-    width: 150px;
-  }
+#search .row_input {
+  width: 150px;
+}
+
+#search .el-input__inner {
+  height: 30px;
+}
 </style>

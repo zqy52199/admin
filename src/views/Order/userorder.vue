@@ -14,7 +14,7 @@
             </div>
             <div>
               <!-- 分页组件 -->
-              <Page />
+              <Page :nums="nums"/>
             </div>
 
           </div>
@@ -47,6 +47,7 @@
   import Search from '@/components/order/Search'
   import List from '@/components/order/List'
   import Page from '@/components/Page'
+  import {request} from '@/network/request'
   export default {
     name: 'userOrder',
     data() {
@@ -64,9 +65,26 @@
           buyerAccount: '买家账号',
           // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
           paymentMethod: '付款方式'
-        }]
+        }],
+        nums:'',
+
 
       }
+    },
+    mounted() {
+      request({
+        url:'/admin/orders/orderlist',
+        method:'post',
+        data:{}
+      }).then(res => {
+        if(res.error == 0) {
+          this.nums = res.data.nums;
+          this.allOrder = res.data.list;
+        }else {
+          alert(res.message)
+        }
+        console.log(res)
+      })
     },
     components: {
       Search,

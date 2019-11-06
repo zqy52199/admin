@@ -4,7 +4,7 @@
           :data="listArr"
           style="width: 100%">
           <el-table-column
-            prop="orderId"
+            prop="OrderId"
             label="订单编号"
             width="180">
           </el-table-column>
@@ -12,27 +12,45 @@
             prop="shopName"
             label="商品名称"
             width="180">
+            <template slot-scope="props">
+              <span v-if="props.row.goodsname.length == 1">{{props.row.goodsname[0]}}</span>
+              <span v-else style="color: red;">·····</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="orderTime"
+            prop="AddTime"
             label="下单时间">
           </el-table-column>
           <el-table-column
-            prop="buyerAccount"
+            prop="UserName"
             label="买家账号"
-            width="180">
+            width="120">
           </el-table-column>
           <el-table-column
-            prop="paymentMethod"
+            prop="pay_ment"
             label="付款方式">
+            <template slot-scope="props">
+              <span v-if="props.row.pay_ment == 0">门店支付</span>
+              <span v-if="props.row.pay_ment == 1">国际汇款</span>
+              <span v-if="props.row.pay_ment == 2">中国国内汇款</span>
+              <span v-if="props.row.pay_ment == 3">西联汇款</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="orderStatus"
+            prop="Status"
             label="订单状态"
-            width="150">
+            width="120">
+            <template slot-scope="props">
+              <span v-if="props.row.Status < 1">未支付</span>
+              <span v-else-if="props.row.Status < 4">待确认</span>
+              <span v-else-if="props.row.Status < 6">待运输</span>
+              <span v-else-if="props.row.Status < 8">待收货</span>
+              <span v-else>已完成</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="operat"
+            width="180"
             label="操作">
            <router-link to="/order/user/detail"><span style="color: #0000FF;cursor: pointer;">查看详情</span></router-link>
             &nbsp;&nbsp;
@@ -57,7 +75,7 @@
       }
     },
     methods: {
-      
+
     }
   }
 </script>

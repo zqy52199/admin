@@ -24,13 +24,13 @@
                   <span>{{ props.row.bankaccount }}</span>
                 </el-form-item></div></el-col>
                <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="所在地区:">
-                  <span>{{ props.row.address }}</span>
+                  <span>{{ props.row.area }}</span>
                 </el-form-item></div></el-col>
                 <el-col :span="8"><div class="grid-content bg-purple"><el-form-item label="注册日期:">
                    <span>{{ props.row.created }}</span>
                  </el-form-item></div></el-col>
                 <el-col :span="24"><div class="grid-content bg-purple"><el-form-item label="详细地址:">
-                   <span>{{ props.row.area }}</span>
+                   <span>{{ props.row.address }}</span>
                  </el-form-item></div></el-col>
 
               </el-form>
@@ -253,7 +253,7 @@
           prop="tixian"
           label="提现方式">
           <template slot-scope="props">
-            <span>{{props.row.mode === 1 ? '银行转账' : '支付宝'}}</span>
+            <span>{{props.row.mode == 1 ? '银行转账' : '支付宝'}}</span>
           </template>
           </el-table-column>
 
@@ -274,7 +274,7 @@
           prop="status"
           label="状态">
           <template scope="scope">
-            <span v-if="scope.row.status == 0"><span style="margin-right: 30px;color: #999;">待处理</span><el-button @click="examineBtn(scope.row.id, scope.$index)" size="mini" type="primary">已打款</el-button></span>
+            <span v-if="scope.row.status == 0"><span style="margin-right: 15px;color: #999;">待处理</span><el-button @click="examineBtn(scope.row.id, scope.$index)" size="mini" type="primary">已打款</el-button></span>
             <span style="color: lawngreen;" v-else>已完成</span>
           </template>
 

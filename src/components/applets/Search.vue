@@ -2,142 +2,195 @@
   <div id="search">
 
     <div class='search_box1' v-if="showInput == 1">
+
        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-         <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-         <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
-         <div style="float: right;">
-           <el-form-item><el-button size="small" type="primary" @click="onSubmit(1)">查询</el-button></el-form-item>
-           <el-form-item><el-button size="small" type="warning" @click="onReset(1)" native-type="reset" >重置</el-button></el-form-item>
-         </div>
+         <el-row>
+           <el-col :span="8">
+             <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
+
+           </el-col>
+           <el-col :span="8">
+             <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
+
+           </el-col>
+           <div style="float: right;">
+             <el-form-item><el-button size="small" type="primary" @click="onSubmit(1)">查询</el-button></el-form-item>
+             <el-form-item><el-button size="small" type="warning" @click="onReset(1)" native-type="reset" >重置</el-button></el-form-item>
+           </div>
+         </el-row>
        </el-form>
     </div>
     <div class='search_box1 laji' v-if="showInput == 2">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
-        <el-form-item >
-          <span class="demonstration">经营品类: </span>
-          <el-cascader v-model="value" :options="datas" :props="{ expandTrigger: 'hover' }"></el-cascader>
-        </el-form-item>
-		<el-form-item class="shenTime" label="申请时间:">
-		  <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
-		  -
-		  <el-date-picker class="row_input" v-model="formInline.endTime" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
-		</el-form-item>
-        <div style="float: right;">
-          <el-form-item><el-button size="small" type="primary" @click="onSubmit(2)">查询</el-button></el-form-item>
-          <el-form-item><el-button size="small" type="warning" @click="onReset(2)" native-type="reset">重置</el-button></el-form-item>
-        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item >
+              <span class="demonstration">经营品类: </span>
+              <el-cascader class="cascaders" v-model="value" :options="datas" :props="{ expandTrigger: 'hover' }"></el-cascader>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item class="shenTime" label="申请时间:">
+              <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
+              -
+              <el-date-picker class="row_input" v-model="formInline.endTime" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <div style="float: right;">
+            <el-form-item><el-button size="small" type="primary" @click="onSubmit(2)">查询</el-button></el-form-item>
+            <el-form-item><el-button size="small" type="warning" @click="onReset(2)" native-type="reset">重置</el-button></el-form-item>
+          </div>
+        </el-row>
+
       </el-form>
     </div>
     <div class='search_box1' v-if="showInput == 3">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
-        <el-form-item label="审核状态:">
-          <el-select v-model="formInline.status" filterable placeholder="请选择">
-            <el-option label="请选择" value=""></el-option>
-            <el-option label="待审核" value="0"></el-option>
-            <el-option label="已通过" value="1"></el-option>
-            <el-option label="已拒绝" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <div style="float: right;">
-          <el-form-item><el-button size="mini" type="primary" @click="onSubmit(3)">查询</el-button></el-form-item>
-          <el-form-item><el-button size="mini" type="warning" @click="onReset(3)" native-type="reset">重置</el-button></el-form-item>
-        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="审核状态:">
+              <el-select v-model="formInline.status" filterable placeholder="请选择">
+                <el-option label="请选择" value=""></el-option>
+                <el-option label="待审核" value="0"></el-option>
+                <el-option label="已通过" value="1"></el-option>
+                <el-option label="已拒绝" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <div style="float: right;">
+            <el-form-item><el-button size="mini" type="primary" @click="onSubmit(3)">查询</el-button></el-form-item>
+            <el-form-item><el-button size="mini" type="warning" @click="onReset(3)" native-type="reset">重置</el-button></el-form-item>
+          </div>
+        </el-row>
 
       </el-form>
     </div>
     <div class='search_box1' v-if="showInput == 4">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="提现方式:">
-          <el-select v-model="formInline.payment" filterable placeholder="请选择">
-            <el-option label="请选择" value=""></el-option>
-            <el-option label="银行转账" value="1"></el-option>
-            <el-option label="支付宝" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <div style="display: inline-block;">
-          <el-form-item style="margin-right: 50px;" label="提现金额:">
-            <el-input
-              style="width: 120px;"
-              placeholder="最小价格"
-              v-model="formInline.minPrice"
-              clearable>
-            </el-input>
-            -
-            <el-input
-              style="width: 120px;"
-              placeholder="最大价格"
-              v-model="formInline.maxPrice"
-              clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item class="shenTime" label="申请时间:">
-            <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
-            -
-            <el-date-picker class="row_input" v-model="formInline.endTime" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
-          </el-form-item>
-        </div>
-        <div style="float: right;">
-          <el-form-item><el-button size="mini" type="primary" @click="onSubmit(4)">查询</el-button></el-form-item>
-          <el-form-item><el-button size="mini" type="warning" @click="onReset(4)" native-type="reset">重置</el-button></el-form-item>
-        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
+
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
+
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="提现方式:">
+               <el-select v-model="formInline.payment" filterable placeholder="请选择">
+                 <el-option label="请选择" value=""></el-option>
+                 <el-option label="银行转账" value="1"></el-option>
+                 <el-option label="支付宝" value="2"></el-option>
+               </el-select>
+             </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="提现金额:">
+              <el-input
+                style="width: 100px;"
+                placeholder="最小价格"
+                v-model="formInline.minPrice"
+                clearable>
+              </el-input>
+              -
+              <el-input
+                style="width: 100px;"
+                placeholder="最大价格"
+                v-model="formInline.maxPrice"
+                clearable>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item class="shenTime" label="申请时间:">
+              <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
+              -
+              <el-date-picker class="row_input" v-model="formInline.endTime" align="right" type="date" placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <div style="float: right;">
+            <el-form-item><el-button size="mini" type="primary" @click="onSubmit(4)">查询</el-button></el-form-item>
+            <el-form-item><el-button size="mini" type="warning" @click="onReset(4)" native-type="reset">重置</el-button></el-form-item>
+          </div>
+        </el-row>
+
 
       </el-form>
     </div>
     <div class='search_box1' v-if="showInput == 5">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-        <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
-        <el-form-item label="有效推广:">
-          <el-input
-            style="width: 120px;"
-            placeholder="请输入下限值"
-            v-model="formInline.startNum"
-            clearable>
-          </el-input>
-          -
-          <el-input
-            style="width: 120px;"
-            placeholder="请输入上限值"
-            v-model="formInline.endNum"
-            clearable>
-          </el-input>
-        </el-form-item>
-        <div style="display: inline-block;">
-          <el-form-item style="margin-right: 50px;" label="提现金额:">
-            <el-input
-              style="width: 120px;"
-              placeholder="最小价格"
-              v-model="formInline.minPrice"
-              clearable>
-            </el-input>
-            -
-            <el-input
-              style="width: 120px;"
-              placeholder="最大价格"
-              v-model="formInline.maxPrice"
-              clearable>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="排序:">
-            <el-select v-model="formInline.sorts" filterable placeholder="请选择">
-              <el-option label="请选择" value=""></el-option>
-              <el-option label="累计提交推广" value="1"></el-option>
-              <el-option label="累计有效推广" value="2"></el-option>
-              <el-option label="累计提现金额" value="3"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div style="float: right;">
-          <el-form-item><el-button size="mini" type="primary" @click="onSubmit(5)">查询</el-button></el-form-item>
-          <el-form-item><el-button size="mini" type="warning" @click="onReset(5)" native-type="reset">重置</el-button></el-form-item>
-        </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
 
+          </el-col>
+          <el-col :span="8">
+           <el-form-item style="margin-right: 50px;" label="姓名:"><el-input v-model="formInline.name" placeholder="姓名"></el-input></el-form-item>
+
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="有效推广:">
+              <el-input
+                style="width: 120px;"
+                placeholder="请输入下限值"
+                v-model="formInline.startNum"
+                clearable>
+              </el-input>
+              -
+              <el-input
+                style="width: 120px;"
+                placeholder="请输入上限值"
+                v-model="formInline.endNum"
+                clearable>
+              </el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item style="margin-right: 50px;" label="提现金额:">
+              <el-input
+                style="width: 100px;"
+                placeholder="最小价格"
+                v-model="formInline.minPrice"
+                clearable>
+              </el-input>
+              -
+              <el-input
+                style="width: 100px;"
+                placeholder="最大价格"
+                v-model="formInline.maxPrice"
+                clearable>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="排序:">
+              <el-select v-model="formInline.sorts" filterable placeholder="请选择">
+                <el-option label="请选择" value=""></el-option>
+                <el-option label="累计提交推广" value="1"></el-option>
+                <el-option label="累计有效推广" value="2"></el-option>
+                <el-option label="累计提现金额" value="3"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <div style="float: right;">
+            <el-form-item><el-button size="mini" type="primary" @click="onSubmit(5)">查询</el-button></el-form-item>
+            <el-form-item><el-button size="mini" type="warning" @click="onReset(5)" native-type="reset">重置</el-button></el-form-item>
+          </div>
+        </el-row>
       </el-form>
     </div>
   </div>
@@ -246,7 +299,7 @@ export default {
         method:'post'
 
       }).then(res => {
-        this.$emit('searchCon',res.data);
+        this.$emit('searchCon',{data:res.data,nums:res.nums});
       })
     },
     // 重置
@@ -257,6 +310,8 @@ export default {
       }else if(e === 2) {
         this.formInline.numberId = '';
         this.formInline.companyName = '';
+        this.formInline.startTime = '';
+        this.formInline.endTime = '';
         this.value = [];
       }else if(e === 3) {
         this.formInline.numberId = '';
@@ -268,8 +323,8 @@ export default {
         this.formInline.payment = '';          //#提现方式
         this.formInline.minPrice = '';           //#最小金额
         this.formInline.maxPrice = '';           //#最大金额
-        this.startTime = '';        //#开始时间（时间戳）
-        this.endTime = '';          //#结束时间（时间戳）
+        this.formInline.startTime = '';        //#开始时间（时间戳）
+        this.formInline.endTime = '';          //#结束时间（时间戳）
       }else if(e === 5) {
           this.formInline.numberId = '';
           this.formInline.name = '';
@@ -298,6 +353,14 @@ export default {
   margin-top: 20px;
 }
 
+#search .el-form-item__label {
+  font-size: 12px;
+}
+
+#search .el-input__inner {
+  font-size: 12px;
+}
+
 #search .el-form {
   border-bottom: 1px solid #dbdbdb;
 }
@@ -311,12 +374,20 @@ export default {
   width: 200px;
 }
 
+#search .cascaders .el-input {
+  width: 270px;
+}
+
 .demonstration {
   padding-right: 8px;
 }
 
 #search .el-input__inner {
   height: 30px;
+}
+
+#search .demonstration {
+  color: #606266;
 }
 
 
