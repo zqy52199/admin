@@ -27,7 +27,7 @@
     },
     methods: {
       handleCurrentChange(e) {
-         console.log(`当前页: ${e}`);
+         this.$emit('userorder',e);
          // 基本资料
          this.$emit('table',e);
           // 商家推广

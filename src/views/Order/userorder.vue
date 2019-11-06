@@ -6,7 +6,7 @@
           <div class="order_component_box">
             <div>
               <!-- 搜索组件 -->
-              <Search />
+              <Search @childData="getChildVal"/>
             </div>
             <div style="margin: 0 10px;border-top: 1px solid #DBDBDB;">
               <!-- 搜索组件 -->
@@ -14,7 +14,7 @@
             </div>
             <div>
               <!-- 分页组件 -->
-              <Page :nums="nums"/>
+              <Page :count="nums" @userorder="pages"/>
             </div>
 
           </div>
@@ -55,18 +55,8 @@
         shows: true,
         activeName:'allOrder',
         // 全部订单
-        allOrder: [{
-          orderId: '订单编号',
-          shopName: '商品名称',
-          // 订单状态  未支付--1  待确认--2  待运输--3  待收货--4  已完成--5
-          orderStatus: '订单状态',
-          orderTime: '下单时间',
-          // 买家账号
-          buyerAccount: '买家账号',
-          // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
-          paymentMethod: '付款方式'
-        }],
-        nums:'',
+        allOrder: [],
+        nums:0,
 
 
       }
@@ -83,7 +73,6 @@
         }else {
           alert(res.message)
         }
-        console.log(res)
       })
     },
     components: {
@@ -92,9 +81,18 @@
       Page
     },
     methods: {
+      // 获得搜索返回的内容
+      getChildVal(val) {
+        this.allOrder = val.data;
+        this.nums = val.nums;
+      },
       handleClick(e) {
         //console.log(e)
       }
+    },
+    // 第几页
+    pages(val) {
+      console.log(val)
     },
     watch:{
       $route(e){

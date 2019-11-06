@@ -9,13 +9,13 @@
             width="180">
           </el-table-column>
           <el-table-column
-            prop="shopName"
+            prop="goodsname"
             label="商品名称"
             width="180">
-            <template slot-scope="props">
-              <span v-if="props.row.goodsname.length == 1">{{props.row.goodsname[0]}}</span>
+            <!-- <template slot-scope="props">
+              <span v-if="props.row.goodsname">{{props.row.goodsname[0]}}</span>
               <span v-else style="color: red;">·····</span>
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column
             prop="AddTime"

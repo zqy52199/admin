@@ -225,7 +225,6 @@ export default {
         endTime: '',
         startNum: '',
         endNum: '',
-
       },
       value: [],
       tempAutoTime: ''
@@ -238,30 +237,30 @@ export default {
     },
     onSubmit(id) {
       let url = '';
-      let data = {};
+      let data1 = {};
       let formInline = this.formInline;
       if(id === 1 ){
         url = '/admin/Smallprogram/salesmanList';
-        data = {
+        data1 = {
           "name":formInline.name,
           "number":formInline.numberId
         }
       }else if(id === 2){
-		  const startTime = this.timeDate(formInline.startTime);
+		  const startTime = this.timeDate(formInline.startTime) || "";
 		  const endTime = this.timeDate(formInline.endTime) || "";
         // 商家推广
         url = '/admin/Smallprogram/merchantList';
-        data = {
+        data1 = {
           "number":formInline.numberId,        //#兼职编号
           "company":formInline.companyName,       //#公司名称
-          "category_id":this.value[2],    //#经营品类id
-		  "start":startTime,         //#开始时间（时间戳）
-		  "end": endTime
+          "category_id":this.value[2] || '',    //#经营品类id
+          "start":startTime,         //#开始时间（时间戳）
+          "end": endTime
         }
       }else if(id === 3){
         // 推荐审核
         url = '/admin/Smallprogram/merchantExamineList';
-        data = {
+        data1 = {
           "number":formInline.numberId,            //#兼职编号
           "company":formInline.companyName,           //#公司名称
           "status":formInline.status
@@ -269,9 +268,9 @@ export default {
       }else if(id === 4){
         // 提现申请
         url = '/admin/Smallprogram/withdrawalsList';
-        const startTime = this.timeDate(formInline.startTime);
+        const startTime = this.timeDate(formInline.startTime) || "";
         const endTime = this.timeDate(formInline.endTime) || "";
-        data = {
+        data1 = {
           "number":formInline.numberId,        //#兼职编号
           "name":formInline.name,          //#姓名
           "mode":formInline.payment,          //#提现方式
@@ -283,7 +282,7 @@ export default {
       }else if(id === 5){
         // 业绩
         url = '/admin/Smallprogram/performanceList';
-        data = {
+        data1 = {
            "number":formInline.numberId,
             "name":formInline.name,
             "yxtgs_min":formInline.startNum,     //# 有效推广数最小值
@@ -295,11 +294,11 @@ export default {
       }
       request({
         url,
-        data,
+        data:data1,
         method:'post'
 
       }).then(res => {
-        this.$emit('searchCon',{data:res.data,nums:res.nums});
+        this.$emit('searchCon',{data:res.data,nums:res.nums,parmas:data1});
       })
     },
     // 重置
