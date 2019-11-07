@@ -11,15 +11,16 @@ export function request(config) {
   if(config.data) {
     config.data.token = localStorage.getItem('token');
   }
+    instance.interceptors.request.use((config) => {
+      if(config.method  === 'post'){
+        config.data = JSON.stringify(config.data);
+      }
+      return config;
+    },(error) =>{
+      return Promise.reject(error);
+    });
 
-  instance.interceptors.request.use((config) => {
-    if(config.method  === 'post'){
-      config.data = JSON.stringify(config.data);
-    }
-    return config;
-  },(error) =>{
-    return Promise.reject(error);
-  });
+
 
   // 2.axios的拦截器
   // 2.1.请求拦截的作用
