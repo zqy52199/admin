@@ -90,7 +90,7 @@
       </el-table>
     </div>
     <!-- 商家推广列表 -->
-    <div v-if="showDiv == 2" class="box2">
+    <div v-if="showDiv == 2" ref="className" class="box2">
       <el-table :data="tempListArr" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -170,64 +170,101 @@
                   </el-form-item>
                 </div>
               </el-col>
+              <el-col :span="24">
+                <div style="font-size: 12px;">
+                  <el-col :span="6">
+                    注册是否通过： {{ props.row.isreg == 0 ? '否' : '是' }} <span style="margin-left: 10px;cursor: pointer;color: #2863FD;">查看</span>
+                    <span v-if="props.row.isreg == 0"><el-button @click="tempClick(props.row.mid, props.row.isreg, 2, props.$index)" size="mini" type="danger">注册</el-button></span>
+                  </el-col>
+                  <el-col :span="6">
+                    产品发布是否达标： {{ props.row.isrelease == 0 ? '否' : '是'}} <span style="margin-left: 10px;cursor: pointer;color: #2863FD;">查看</span>
+                  <span v-if="props.row.isrelease == 0"><el-button @click="tempClick(props.row.mid, props.row.isrelease, 3, props.$index)" size="mini" type="danger">发布</el-button></span>
+                  </el-col>
+
+                </div>
+              </el-col>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column width="80px" label="ID">
+        <el-table-column width="60px" label="ID">
           <template slot-scope="props">
-            {{ props.$index + 1 }}
+            <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.$index + 1 }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.$index + 1 }}</span>
+            <span v-if="props.row.status == 1" style="color: green;">{{ props.$index + 1 }}</span>
+            <span v-if="props.row.status == 2" style="color: red;">{{ props.$index + 1 }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="企业名称" prop="company"></el-table-column>
-        <el-table-column width="220px" label="经营品类" prop="category_id"></el-table-column>
-        <el-table-column label="兼职编号" prop="number"></el-table-column>
-        <el-table-column width="220px" label="提交日期" prop="updated"></el-table-column>
+        <el-table-column width="60px" label="选择">
+
+          <template slot-scope="props">
+           <input type="checkbox" v-if="props.row.status == 0 && props.row.isrelease == 1 && props.row.isreg == 1" name="checkbox1" v-model="checkVal" :value="props.row.mid" class="checkInput">
+          </template>
+
+        </el-table-column>
+        <el-table-column label="企业名称">
+          <template slot-scope="props">
+            <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.company }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.company }}</span>
+            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.company }}</span>
+            <span v-if="props.row.status == 2" style="color: red;">{{ props.row.company }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="兼职编号">
+          <template slot-scope="props">
+            <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.number }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.number }}</span>
+            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.number }}</span>
+            <span v-if="props.row.status == 2" style="color: red;">{{ props.row.number }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="220px" label="提交日期">
+          <template slot-scope="props">
+            <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.updated }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.updated }}</span>
+            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.updated }}</span>
+            <span v-if="props.row.status == 2" style="color: red;">{{ props.row.updated }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="220px" label="操作" prop="updated">
+          <template slot-scope="props">
+
+              <el-button v-if="props.row.status == 1" disabled size="mini" type="success">已通过</el-button>
+              <el-button v-if="props.row.status == 2" disabled size="mini" type="danger">已拒绝</el-button>
+
+            <span v-if="props.row.status == 0 && props.row.isrelease == 1 && props.row.isreg == 1" ref="radios">
+              <span style="margin-right: 10px;">
+                <input type="checkbox" :value="1" :data-mid="props.row.mid" :class="'radiosTwo radiosTwo'+props.row.mid" @click="radiosCheck(1, 'radiosTwo'+props.row.mid)" style="position: relative;top: 3px;" >
+                <el-button size="mini" type="success">通过</el-button>
+              </span>
+              <span>
+                <input type="checkbox" :value="2" :data-mid="props.row.mid" :class="'radiosTwo radiosTwo'+props.row.mid" @click="radiosCheck(2, 'radiosTwo'+props.row.mid)" style="position: relative;top: 3px;" >
+                <el-button size="mini" type="danger">拒绝</el-button>
+              </span>
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="props">
-            <span v-if="props.row.status == 0" style="color: #999;">待审核</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">待审核</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">待审核</span>
             <span v-else-if="props.row.status == 1" style="color: green;">已通过</span>
-            <span v-else-if="props.row.status == 2" style="color: #999;">未通过</span>
+            <span v-else-if="props.row.status == 2" style="color: red;">已拒接</span>
           </template>
         </el-table-column>
       </el-table>
-    </div>
-    <!-- 推荐商家审核列表 -->
-    <div v-if="showDiv == 3" class="box3">
-      <el-table :data="tempListArr" style="width: 100%">
-        <el-table-column width="80px" label="ID">
-          <template slot-scope="props">
-            {{ props.$index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column label="兼职编号" prop="number"></el-table-column>
-        <el-table-column width="220px" label="企业名称" prop="company"></el-table-column>
-        <el-table-column label="注册是否通过">
-          <template scope="scope">
-            <span>{{ scope.row.isreg == 0 ? '否' : '是' }}</span>
-            <span style="color:blue;margin-left:20px;cursor:pointer">查看</span>
-            <span v-if="scope.row.isreg == 0"><el-button @click="tempClick(scope.row.mid, scope.row.isreg, 2, scope.$index)" size="mini" type="danger">注册</el-button></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="产品发布是否达标">
-          <template scope="scope">
-            <span>{{ scope.row.isrelease == 0 ? '否' : '是' }}</span>
-            <span style="color:blue;margin-left:20px;cursor:pointer">查看</span>
-            <span v-if="scope.row.isrelease == 0">
-              <el-button @click="tempClick(scope.row.mid, scope.row.isrelease, 3, scope.$index)" size="mini" type="danger">发布</el-button>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template scope="scope">
-            <span v-if="scope.row.isrelease == 1 && scope.row.isreg == 1 && scope.row.status == 0">
-              <el-button @click="by(scope.row.mid, 1, scope.$index)" size="mini" type="success">通过</el-button>
-              <el-button @click="by(scope.row.mid, 2, scope.$index)" size="mini" type="danger">拒绝</el-button>
-            </span>
-            <span v-if="scope.row.status == 1"><el-button size="mini" disabled type="success">已通过</el-button></span>
-            <span v-if="scope.row.status == 2"><el-button size="mini" disabled type="danger">已拒绝</el-button></span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="margin: 20px 20px;overflow: hidden;">
+        <div style="float: left;">
+         <span ><input style="position: relative;top: 2px;" type="checkbox" @click="allCheck"> 全选</span>
+         <span></span>
+         <el-button type="success" size="mini" @click="allBy(1)">一键通过</el-button>
+         <el-button type="danger" size="mini" @click="allBy(2)">一键拒绝</el-button>
+        </div>
+        <div style="float: right;">
+          已选 <el-button style="margin: 0 10px;" type="primary" size="mini" @click="allBtn">一键通过</el-button>
+        </div>
+
+      </div>
+
     </div>
     <!-- 提现申请列表 -->
     <div v-if="showDiv == 4" class="box4">
@@ -281,7 +318,34 @@
       <el-table :data="tempListArr" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <div style="width: 80%;margin: 0 auto;text-align: center;font-size: 14px;font-weight: 600;">
+            <el-table
+                  :data="props.row.descdata"
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    label="日期"
+                    width="180">
+                  </el-table-column>
+                  <el-table-column
+                    prop="byljtg"
+                    label="本月累计推广"
+                    width="180">
+                  </el-table-column>
+                  <el-table-column
+                    prop="byyxtg"
+                    label="本月有效推广">
+                  </el-table-column>
+            			<el-table-column
+            			  prop="byjxjs"
+            			  label="本月绩效基数"
+            			  width="180">
+            			</el-table-column>
+            			<el-table-column
+            			  prop="bytxje"
+            			  label="本月提现金额">
+            			</el-table-column>
+                </el-table>
+           <!-- <div style="width: 80%;margin: 0 auto;text-align: center;font-size: 14px;font-weight: 600;">
               <el-col :span="4">日期</el-col>
               <el-col :span="4">本月累计推广</el-col>
               <el-col :span="4">本月有效推广</el-col>
@@ -294,26 +358,32 @@
               <el-col :span="4">{{ item.byyxtg }}</el-col>
               <el-col :span="5">{{ item.byjxjs }}</el-col>
               <el-col :span="4">{{ item.bytxje }}</el-col>
-            </div>
+            </div> -->
           </template>
         </el-table-column>
-        <el-table-column width="80px" label="ID">
+        <el-table-column width="60px" label="ID">
           <template scope="props">
             {{ props.$index + 1 }}
           </template>
         </el-table-column>
         <el-table-column label="兼职编号" prop="number"></el-table-column>
-        <el-table-column width="150px" label="姓名" prop="name"></el-table-column>
+        <el-table-column label="姓名" prop="name"></el-table-column>
         <el-table-column prop="created" label="注册日期"></el-table-column>
 
         <el-table-column prop="ljtgs" label="累计提交推广"></el-table-column>
 
         <el-table-column prop="yxtgs" label="累计有效推广"></el-table-column>
+        <el-table-column prop="ljzyj" label="累计总业绩"></el-table-column>
 
-        <el-table-column prop="txje" label="累计提现金额(￥)"></el-table-column>
+        <el-table-column prop="txje" label="累计提现(￥)"></el-table-column>
+        <el-table-column prop="dqtx" label="当前提现(￥)"></el-table-column>
         <el-table-column prop="dqye" label="当前余额(￥)"></el-table-column>
       </el-table>
+      <div style="float: right;margin: 20px 30px;">
+        <el-button @click="exportExcel" type="primary">导出Excel</el-button>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -323,7 +393,7 @@ import { baseURL } from '@/network/baseURL';
 import axios from 'axios';
 export default {
   name: 'list',
-  props: ['listArr', 'showDiv', 'performanceTow'],
+  props: ['listArr', 'showDiv', 'performanceTow', 'parmasPer'],
   data() {
     return {
       baseURL: baseURL,
@@ -333,10 +403,107 @@ export default {
       imgUrl: '',
       imgName:'',
       id:'',
-      index:''
+      index:'',
+      checkVal:[],
+      checkeds:true,
+      frist:0,
+      mid:0
     };
   },
   methods: {
+    // 导出excel
+    exportExcel() {
+     const name =  this.parmasPer.name;
+     const number =  this.parmasPer.number;
+     const sort =  this.parmasPer.sort;
+     const txje_max =  this.parmasPer.txje_max;
+     const txje_min =  this.parmasPer.txje_min;
+     const yxtgs_max =  this.parmasPer.yxtgs_max;
+     const yxtgs_min =  this.parmasPer.yxtgs_min;
+      window.location.href = 'https://vx.eaglesell.com.cn/index.php/admin/Publicoperate/excel?number='+number+'&name='+name+'&sort='+sort+'&txje_max='+txje_max+'&txje_min='+txje_min+'&yxtgs_max='+yxtgs_max+'&yxtgs_min='+yxtgs_min+'';
+    },
+    // 一键通过 或拒绝
+    allBy(status) {
+       let list = [];
+       let arr = this.checkVal;
+       for(let i = 0; i < arr.length; i++) {
+         let obj = {mid:arr[i],status:status};
+         list.push(obj)
+       }
+       this.axios(list)
+    },
+    // 一键提交
+    allBtn() {
+       let checkDom = this.$refs.className.getElementsByClassName('radiosTwo');
+       let list = [];
+       for(let i in checkDom){
+         if(checkDom[i].checked) {
+           let mid = checkDom[i].getAttribute("data-mid");
+           let status = checkDom[i].value;
+           let obj = {status, mid};
+            list.push(obj);
+         }
+       }
+      this.axios(list)
+    },
+    // 请求封装
+    axios(list) {
+      request({
+        url:'/admin/Smallprogram/merchantExamine',
+        method:'post',
+        data:{
+          list
+        }
+      }).then(res => {
+        if(res.error == 0) {
+          this.$emit('tempEvent',0)
+        }
+        alert(res.message)
+      })
+    },
+
+    nihao() {
+        console.log(this.checkVal)
+    },
+    allCheck() {
+       let checkDom = this.$refs.className.getElementsByClassName('checkInput');
+        for(let i = 0; i<checkDom.length; i++) {
+
+          if(this.checkeds) {
+            this.checkVal.push(checkDom[i].value)
+            checkDom[i].checked = true
+          }else {
+            checkDom[i].checked = false
+            this.checkVal = [];
+          }
+
+        }
+
+        this.checkeds = !this.checkeds;
+    },
+    // 复选变单选
+    radiosCheck(obj, mid) {
+      let arr=this.$refs.className.getElementsByClassName(mid);
+      if(this.frist == obj && this.mid == mid) {
+        arr[0].checked = false;
+        arr[1].checked = false;
+        obj = 0;
+      }else {
+        if(obj == 1) {
+          arr[0].checked = true;
+          arr[1].checked = false;
+        }else if(obj == 2) {
+          arr[0].checked = false;
+          arr[1].checked = true;
+        }
+
+
+      }
+
+      this.frist = obj;
+      this.mid = mid;
+             
+    },
     // 已打款确定
     determine() {
       request({
@@ -463,4 +630,14 @@ export default {
   color: #333;
   font-size: 14px;
 }
+
+.el-table th.is-leaf {
+  text-align: center;
+}
+
+.el-table .el-table__row td {
+  text-align: center;
+}
+
+
 </style>

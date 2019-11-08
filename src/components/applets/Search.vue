@@ -23,19 +23,23 @@
     <div class='search_box1 laji' v-if="showInput == 2">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item >
-              <span class="demonstration">经营品类: </span>
-              <el-cascader class="cascaders" v-model="value" :options="datas" :props="{ expandTrigger: 'hover' }"></el-cascader>
+            <el-form-item style="margin-right: 50px;" label="状态:">
+            <el-select v-model="formInline.status" filterable placeholder="请选择">
+              <el-option label="请选择" value=""></el-option>
+              <el-option label="待审核" value="0"></el-option>
+              <el-option label="已通过" value="1"></el-option>
+              <el-option label="已拒绝" value="2"></el-option>
+            </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="11">
             <el-form-item class="shenTime" label="申请时间:">
               <el-date-picker class="row_input" v-model="formInline.startTime" align="right" type="date" placeholder="开始日期" :picker-options="pickerOptions"></el-date-picker>
               -
@@ -50,33 +54,7 @@
 
       </el-form>
     </div>
-    <div class='search_box1' v-if="showInput == 3">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="审核状态:">
-              <el-select v-model="formInline.status" filterable placeholder="请选择">
-                <el-option label="请选择" value=""></el-option>
-                <el-option label="待审核" value="0"></el-option>
-                <el-option label="已通过" value="1"></el-option>
-                <el-option label="已拒绝" value="2"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <div style="float: right;">
-            <el-form-item><el-button size="mini" type="primary" @click="onSubmit(3)">查询</el-button></el-form-item>
-            <el-form-item><el-button size="mini" type="warning" @click="onReset(3)" native-type="reset">重置</el-button></el-form-item>
-          </div>
-        </el-row>
 
-      </el-form>
-    </div>
     <div class='search_box1' v-if="showInput == 4">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-row>
@@ -200,7 +178,7 @@
   import {request} from '@/network/request';
 export default {
   name: 'search',
-  props:['showInput', 'datas'],
+  props:['showInput', 'datas', 'count'],
   data() {
     return {
       pickerOptions: {
@@ -243,7 +221,8 @@ export default {
         url = '/admin/Smallprogram/salesmanList';
         data1 = {
           "name":formInline.name,
-          "number":formInline.numberId
+          "number":formInline.numberId,
+          "count":this.count
         }
       }else if(id === 2){
 		  const startTime = this.timeDate(formInline.startTime) || "";
@@ -253,19 +232,12 @@ export default {
         data1 = {
           "number":formInline.numberId,        //#兼职编号
           "company":formInline.companyName,       //#公司名称
-          "category_id":this.value[2] || '',    //#经营品类id
+          "status":formInline.status,    //#经营品类id
           "start":startTime,         //#开始时间（时间戳）
-          "end": endTime
+          "end": endTime,
+          "count":this.count
         }
-      }else if(id === 3){
-        // 推荐审核
-        url = '/admin/Smallprogram/merchantExamineList';
-        data1 = {
-          "number":formInline.numberId,            //#兼职编号
-          "company":formInline.companyName,           //#公司名称
-          "status":formInline.status
-        }
-      }else if(id === 4){
+      } else if(id === 4){
         // 提现申请
         url = '/admin/Smallprogram/withdrawalsList';
         const startTime = this.timeDate(formInline.startTime) || "";
@@ -277,7 +249,8 @@ export default {
           "min":formInline.minPrice,           //#最小金额
           "max": formInline.maxPrice,           //#最大金额
           "start":startTime,         //#开始时间（时间戳）
-          "end": endTime        //#结束时间（时间戳）
+          "end": endTime,        //#结束时间（时间戳）
+          "count":this.count
         }
       }else if(id === 5){
         // 业绩
@@ -289,7 +262,8 @@ export default {
             "yxtgs_max":formInline.endNum,     //# 有效推广数最大值
             "txje_min":formInline.minPrice,      //#提现金额最小值
             "txje_max":formInline.maxPrice,       //#提现金额最大值
-            "sort":formInline.sorts        //#排序 1.累计提交推广数  2.累计有效推广数  3.累计提现金额
+            "sort":formInline.sorts,        //#排序 1.累计提交推广数  2.累计有效推广数  3.累计提现金额
+            "count":this.count
         }
       }
       request({
@@ -312,11 +286,13 @@ export default {
         this.formInline.startTime = '';
         this.formInline.endTime = '';
         this.value = [];
-      }else if(e === 3) {
-        this.formInline.numberId = '';
-        this.formInline.companyName = '';
-        this.formInline.status = '';
-      }else if(e === 4) {
+      }
+      // else if(e === 3) {
+      //   this.formInline.numberId = '';
+      //   this.formInline.companyName = '';
+      //   this.formInline.status = '';
+      // }
+      else if(e === 4) {
         this.formInline.numberId = '';        //#兼职编号
         this.formInline.name = '';          //#姓名
         this.formInline.payment = '';          //#提现方式

@@ -5,7 +5,7 @@
         <el-tab-pane label="基本资料" name="tableData">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="1" ref="mychild1" @searchCon="tableDataSearch"></Search>
+            <Search :showInput="1" :count="count" ref="mychild1" @searchCon="tableDataSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -13,41 +13,27 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page @table="table2" :count="tableDataCount"></Page>
+            <Page @table="table2" :count2="count" :count="tableDataCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="商家推广" name="merchantInfo">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="2" ref="mychild2" @searchCon="merchantInfoSearch" :datas="datas"></Search>
+            <Search :showInput="2" :count="count" ref="mychild2" @searchCon="merchantInfoSearch" :datas="datas"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
-            <List :listArr="merchantInfo" :showDiv="2"></List>
+            <List :listArr="merchantInfo" @tempEvent="getTempEvent" :showDiv="2"></List>
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page @merchant="merchant2" :count="merchantInfoCount"></Page>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="推荐审核" name="auditRecord">
-          <div>
-            <!-- 搜索组件 -->
-            <Search :showInput="3" ref="mychild3" @searchCon="auditRecordSearch"></Search>
-          </div>
-          <div>
-            <!-- 列表组件 -->
-            <List :listArr="auditRecord" :showDiv="3"></List>
-          </div>
-          <div>
-            <!-- 分页组件 -->
-            <Page @audit="audit2" :count="auditRecordCount"></Page>
+            <Page @merchant="merchant2" :count2="count" :count="merchantInfoCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="提现申请" name="withdraw">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="4" ref="mychild4" @searchCon="withdrawSearch"></Search>
+            <Search :showInput="4" :count="count" ref="mychild4" @searchCon="withdrawSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
@@ -55,21 +41,21 @@
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page @withdraw="withdraw2" :count="withdrawCount"></Page>
+            <Page @withdraw="withdraw2" :count2="count" :count="withdrawCount"></Page>
           </div>
         </el-tab-pane>
         <el-tab-pane label="推广业绩" name="performance">
           <div>
             <!-- 搜索组件 -->
-            <Search :showInput="5" ref="mychild5" @searchCon="performanceSearch"></Search>
+            <Search :showInput="5" :count="count" ref="mychild5" @searchCon="performanceSearch"></Search>
           </div>
           <div>
             <!-- 列表组件 -->
-            <List :listArr="performance" :showDiv="5" :performanceTow="performanceTow"></List>
+            <List :listArr="performance" :showDiv="5" :parmasPer="parmas" :performanceTow="performanceTow"></List>
           </div>
           <div>
             <!-- 分页组件 -->
-            <Page @performance="performance2" :count="performanceCount"></Page>
+            <Page @performance="performance2" :count2="count" :count="performanceCount"></Page>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -99,8 +85,8 @@ export default {
       withdraw: [],
       withdrawCount: 0,
       // 审核记录
-      auditRecord: [],
-      auditRecordCount: 0,
+      // auditRecord: [],
+      // auditRecordCount: 0,
       // 商家推广
       merchantInfo: [],
       merchantInfoCount: 0,
@@ -111,7 +97,8 @@ export default {
       // 分类信息
       options: [],
       // 分页
-      parmas: {}
+      parmas: {},
+      count:10
     };
   },
   components: {
@@ -125,14 +112,16 @@ export default {
     this.publisFn('/admin/Smallprogram/salesmanList', 1);
     // 商家推广
     this.publisFn('/admin/Smallprogram/merchantList', 2);
-    // 推荐审核
-    this.publisFn('/admin/Smallprogram/merchantExamineList', 3);
     // 提现申请
     this.publisFn('/admin/Smallprogram/withdrawalsList', 4);
     // 推广业绩
     this.publisFn('/admin/Smallprogram/performanceList', 5);
   },
   methods: {
+    // list 返回事件商家审核
+    getTempEvent(val) {
+      this.$refs.mychild2.onSubmit(2);
+    },
     // 点击导航栏事件
     handleClick(tab) {
       this.parmas = {};
@@ -141,8 +130,6 @@ export default {
         this.$refs.mychild1.onReset(1)
       } else if (name == 'merchantInfo') {
         this.$refs.mychild2.onReset(2)
-      } else if (name == 'auditRecord') {
-        this.$refs.mychild3.onReset(3)
       } else if (name == 'withdraw') {
         this.$refs.mychild4.onReset(4)
       } else if (name == 'performance') {
@@ -150,23 +137,24 @@ export default {
       }
     },
     table2(e) {
-      this.chackFn(e, '10', '/admin/Smallprogram/salesmanList', 1);
+      this.count = e.page;
+      this.chackFn(e.e, e.page, '/admin/Smallprogram/salesmanList', 1);
     },
     // 商家推广
     merchant2(e) {
-      this.chackFn(e, '10', '/admin/Smallprogram/merchantList', 2);
+      this.count = e.page;
+      this.chackFn(e.e, e.page, '/admin/Smallprogram/merchantList', 2);
     },
-    // 审核记录
-    audit2(e) {
-      this.chackFn(e, '10', '/admin/Smallprogram/merchantExamineList', 3);
-    },
+
     // 提现申请
     withdraw2(e) {
-      this.chackFn(e, '10', '/admin/Smallprogram/withdrawalsList', 4);
+      this.count = e.page;
+      this.chackFn(e.e, e.page, '/admin/Smallprogram/withdrawalsList', 4);
     },
     // 推广业绩
     performance2(e) {
-      this.chackFn(e, '10', '/admin/Smallprogram/performanceList', 5);
+      this.count = e.page;
+      this.chackFn(e.e, e.page, '/admin/Smallprogram/performanceList', 5);
     },
     // 获取内容
     publisFn(url, obj) {
@@ -183,10 +171,8 @@ export default {
         } else if (obj === 2) {
           this.merchantInfo = data;
           this.merchantInfoCount = nums;
-        } else if (obj === 3) {
-          this.auditRecord = data;
-          this.auditRecordCount = nums;
-        } else if (obj === 4) {
+        }
+         else if (obj === 4) {
           this.withdraw = data;
           this.withdrawCount = nums;
         } else if (obj === 5) {
@@ -212,9 +198,6 @@ export default {
         } else if (obj === 2) {
           this.merchantInfo = data;
           this.merchantInfoCount = nums;
-        } else if (obj === 3) {
-          this.auditRecord = data;
-          this.auditRecordCount = nums;
         } else if (obj === 4) {
           this.withdraw = data;
           this.withdrawCount = nums;
@@ -278,14 +261,6 @@ export default {
       this.parmas = obj;
       this.merchantInfo = e.data;
       this.merchantInfoCount = e.nums;
-    },
-    // 推荐审核
-    auditRecordSearch(e) {
-      let obj = e.parmas;
-      delete(obj["token"]);
-      this.parmas = obj;
-      this.auditRecord = e.data;
-      this.auditRecordCount = e.nums;
     },
     // 提现审核
     withdrawSearch(e) {
