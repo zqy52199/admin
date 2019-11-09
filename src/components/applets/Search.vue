@@ -14,8 +14,8 @@
 
            </el-col>
            <div style="float: right;">
-             <el-form-item><el-button size="small" type="primary" @click="onSubmit(1)">查询</el-button></el-form-item>
-             <el-form-item><el-button size="small" type="warning" @click="onReset(1)" native-type="reset" >重置</el-button></el-form-item>
+             <el-form-item><el-button size="mini" type="primary" @click="onSubmit(1)">查询</el-button></el-form-item>
+             <el-form-item><el-button size="mini" type="warning" @click="onReset(1)" native-type="reset" >重置</el-button></el-form-item>
            </div>
          </el-row>
        </el-form>
@@ -23,10 +23,10 @@
     <div class='search_box1 laji' v-if="showInput == 2">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-row>
-          <el-col :span="6">
+          <el-col :span="8">
             <el-form-item style="margin-right: 50px;" label="兼职编号:"><el-input v-model="formInline.numberId" placeholder="兼职编号"></el-input></el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="8">
             <el-form-item style="margin-right: 50px;" label="企业名称:"><el-input style="width: 200px;" v-model="formInline.companyName" placeholder="企业名称"></el-input></el-form-item>
           </el-col>
           <el-col :span="8">
@@ -47,8 +47,8 @@
             </el-form-item>
           </el-col>
           <div style="float: right;">
-            <el-form-item><el-button size="small" type="primary" @click="onSubmit(2)">查询</el-button></el-form-item>
-            <el-form-item><el-button size="small" type="warning" @click="onReset(2)" native-type="reset">重置</el-button></el-form-item>
+            <el-form-item><el-button size="mini" type="primary" @click="onSubmit(2)">查询</el-button></el-form-item>
+            <el-form-item><el-button size="mini" type="warning" @click="onReset(2)" native-type="reset">重置</el-button></el-form-item>
           </div>
         </el-row>
 
@@ -285,14 +285,9 @@ export default {
         this.formInline.companyName = '';
         this.formInline.startTime = '';
         this.formInline.endTime = '';
+        this.formInline.status = ''
         this.value = [];
-      }
-      // else if(e === 3) {
-      //   this.formInline.numberId = '';
-      //   this.formInline.companyName = '';
-      //   this.formInline.status = '';
-      // }
-      else if(e === 4) {
+      }else if(e === 4) {
         this.formInline.numberId = '';        //#兼职编号
         this.formInline.name = '';          //#姓名
         this.formInline.payment = '';          //#提现方式
@@ -370,6 +365,15 @@ export default {
   line-height: 23px;
 }
 
+/* #search .el-button--primary {
+  background-color: #006ac3;
+  border: none;
+}
 
+#search .el-button--warning {
+  background-color: #1eb86b;
+  border: none;
+}
+ */
 
 </style>

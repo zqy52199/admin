@@ -2,19 +2,18 @@
   <div id="app" style="height: 100%;width: 100%;">
     <div v-if="!homeShow" class="app_login" :style="backgroundDiv">
       <div class="app_login_box">
-        <el-form ref="form" :model="formData" label-width="80px">
-          <el-form-item label="账号:">
-            <el-input  placeholder="账号" v-model="formData.user"></el-input>
-          </el-form-item>
-          <el-form-item label="密码:">
-            <el-input type="password" placeholder="密码"  v-model="formData.pwd"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button style="width: 180px;"  type="primary" @click="onSubmit">登录</el-button>
-          </el-form-item>
-        </el-form>
+        <div class="app_login_user">
+          <input v-model="formData.user" type="text" placeholder="请输入用户名">
+        </div>
+        <div class="app_login_password">
+          <input v-model="formData.pwd" type="password" placeholder="请输入密码">
+        </div>
+        <div class="app_login_code">
+          <input type="text" @keyup.enter="onSubmit" v-model="formData.code" style="width: 110px;" placeholder="请输入认证码">
+          <span style="float: right;margin-top: 6px;"  @click="changeCode"><Canvas ref="myClick" /></span>
+        </div>
+        <button @click="onSubmit" class="btn">立即登录</button>
       </div>
-
     </div>
 
     <div v-if="homeShow" class="app_home">
@@ -113,6 +112,7 @@
 <script>
   import {request} from './network/request'
   import breadList from './components/breadcrumb'
+  import Canvas from '@/components/Canvas'
 export default {
   name: 'App',
   data() {
@@ -127,8 +127,11 @@ export default {
       homeShow:false,
       formData:{
         user:'',
-        pwd:''
+        pwd:'',
+        code:''
       },
+      // 认证码
+      identifyCode:'ACT9',
       // 常用功能
       commonlyUsed: [{
         title:'消息管理',
@@ -151,7 +154,8 @@ export default {
     };
   },
   components: {
-    breadList
+    breadList,
+    Canvas
   },
   mounted() {
     const history =JSON.parse(localStorage.getItem('history'));
@@ -169,36 +173,69 @@ export default {
       this.homeShow = true;
     }
 
+    // 认证码调用
+    this.changeCode();
   },
   methods: {
+
     // 登录
     onSubmit() {
-      request({
-        url:'/admin/PublicOperate/login',
-        method:'post',
-        data:{
-          username:this.formData.user,
-          password:this.formData.pwd
-        }
-      }).then(res => {
-       if(res.error === 0) {
-          this.homeShow = true;
-          localStorage.setItem('token',res.data.token)
-          this.token = res.data.token;
-          localStorage.setItem('nav',JSON.stringify(res.data.auth))
-          this.nav = res.data.auth;
-        }else {
-          alert(res.message)
-        }
-      })
+      const user = this.formData.user;
+      const pwd = this.formData.pwd;
+      const code = this.formData.code.toUpperCase();
+      const identifyCode = this.identifyCode;
+      if(user == '') {
+        alert("请输入账号")
+      }else if(pwd == '') {
+        alert("请输入密码")
+      }else if(code == ''){
+        alert("请输入认证码")
+      }else if(code != identifyCode) {
+        alert('认证码错误');
+        this.changeCode();
+      }else {
+        request({
+          url:'/admin/PublicOperate/login',
+          method:'post',
+          data:{
+            username:user,
+            password:pwd
+          }
+        }).then(res => {
+         if(res.error === 0) {
+            this.homeShow = true;
+            localStorage.setItem('token',res.data.token)
+            this.token = res.data.token;
+            localStorage.setItem('nav',JSON.stringify(res.data.auth))
+            this.nav = res.data.auth;
+          }else {
+            alert(res.message)
+          }
+        })
+      }
+
+    },
+    // 认证码
+    changeCode() {
+      const arr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const one = arr[Math.floor(Math.random()*arr.length)];
+      const two = arr[Math.floor(Math.random()*arr.length)];
+      const three = arr[Math.floor(Math.random()*arr.length)];
+      const four = arr[Math.floor(Math.random()*arr.length)];
+      this.identifyCode = one + two + three + four;
+      this.$refs.myClick.drawPic(this.identifyCode)
     },
     // 退出登录
     outLogin() {
        this.homeShow = false;
-
        localStorage.removeItem('token');
        localStorage.removeItem('nav');
        localStorage.removeItem('history');
+       this.formData.code = '';
+       setTimeout(() => {
+         this.changeCode();
+       },100)
+
     },
     // 路由跳转
     handleCommand(e) {
@@ -235,7 +272,8 @@ export default {
       this.$router.push(e);
     },
 
-  }
+  },
+
 };
 </script>
 
@@ -344,10 +382,10 @@ a {
   font-size: 14px;
 }
 
-.el-main {
+.app_home .el-main {
   background-color: #e9eef3;
   color: #333;
-  padding: 0;
+  padding-top:0px;
 }
 
 .header_right {
@@ -480,4 +518,38 @@ tbody .cell {
   padding: 50px;
   padding-right: 100px;
 }
+
+.app_login_box input {
+  border: none;
+  outline:none;
+  height: 25px;
+  width: 200px;
+  padding-left: 10px;
+}
+
+.app_login_box > div {
+  border-bottom: 1px solid #DBDBDB;
+height: 42px;
+line-height: 41px;
+}
+
+.app_login_box .btn {
+  width: 250px;
+  height: 35px;
+  line-height: 35px;
+  background: #2993FF;
+  border-radius: 6px;
+  text-align: center;
+  border: none;
+  font-size: 16px;
+  color: #FFFFFF;
+  margin-top: 25px;
+  cursor: pointer;
+  outline:none;
+}
+
+.app_login_box .btn:hover {
+  background: #79B5F3;
+}
+
 </style>

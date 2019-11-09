@@ -14,7 +14,7 @@
             </div>
             <div>
               <!-- 分页组件 -->
-              <Page :count="nums" @userorder="pages"/>
+              <Page :count="nums" />
             </div>
 
           </div>
@@ -56,9 +56,7 @@
         activeName:'allOrder',
         // 全部订单
         allOrder: [],
-        nums:0,
-
-
+        nums:0
       }
     },
     mounted() {
@@ -88,15 +86,20 @@
       },
       handleClick(e) {
         //console.log(e)
+      },
+      // 接受页数返回
+      userorder(val) {
+        console.log(val)
       }
+
     },
     // 第几页
-    pages(val) {
-      console.log(val)
-    },
+    // pages(val) {
+    //   console.log(val)
+    // },
+    // 监控路由发生改变事件
     watch:{
       $route(e){
-
         if(e.fullPath == '/order/user'){
           this.shows = true;
         }else{

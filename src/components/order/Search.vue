@@ -56,8 +56,8 @@
         <el-col :span="9">
           <div style="float: right;margin-right: 15px;">
             <el-form-item>
-              <el-button type="primary" size="small" @click="onSubmit">查询</el-button>
-              <el-button type="warning" size="small" @click="onReset" native-type="reset">重置</el-button>
+              <el-button type="primary" size="mini" @click="onSubmit">查询</el-button>
+              <el-button type="warning" size="mini" @click="onReset" native-type="reset">重置</el-button>
             </el-form-item>
           </div>
         </el-col>
@@ -97,24 +97,24 @@ export default {
       let end = this.timeDate(this.formData.end);
       let start = this.timeDate(this.formData.start);
       let data = {
-          ordersn: this.formData.ordersn,
-          goodsname: this.formData.goodsname,
-          // 订单状态  未支付--1  待确认--2  待运输--3  待收货--4  已完成--5
-          status: this.formData.status,
-          start: start,
-          end: end,
-          // 买家账号
-          username: this.formData.username,
-          // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
-          payment: this.formData.payment
-      }
+        ordersn: this.formData.ordersn,
+        goodsname: this.formData.goodsname,
+        // 订单状态  未支付--1  待确认--2  待运输--3  待收货--4  已完成--5
+        status: this.formData.status,
+        start: start,
+        end: end,
+        // 买家账号
+        username: this.formData.username,
+        // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
+        payment: this.formData.payment
+      };
       request({
         url: '/admin/orders/orderlist',
         method: 'post',
         data
       }).then(res => {
-        this.$emit('childData',{data:res.data.list,nums:res.data.nums})
-      })
+        this.$emit('childData', { data: res.data.list, nums: res.data.nums });
+      });
     },
     // 重置搜索内容
     onReset() {
@@ -129,21 +129,19 @@ export default {
         username: '',
         // 付款方式  本地门店支付--0  国际汇款--1  中国国内汇款--2  西联汇款--3
         payment: ''
-      }
+      };
       request({
         url: '/admin/orders/orderlist',
         method: 'post',
-        data:{
-          
-        }
+        data: {}
       }).then(res => {
-        this.$emit('childData',{data:res.data.list,nums:res.data.nums})
-      })
+        this.$emit('childData', { data: res.data.list, nums: res.data.nums });
+      });
     },
     // 时间转换成时间戳
     timeDate(time) {
       const d = new Date(time);
-      return d.getTime()/1000;
+      return d.getTime() / 1000;
     }
   }
 };

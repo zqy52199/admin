@@ -171,7 +171,7 @@
                 </div>
               </el-col>
               <el-col :span="24">
-                <div style="font-size: 12px;">
+                <div style="font-size: 12px;border: 1px blue dashed;border-radius: 6px;padding: 20px;overflow: hidden;">
                   <el-col :span="6">
                     注册是否通过： {{ props.row.isreg == 0 ? '否' : '是' }} <span style="margin-left: 10px;cursor: pointer;color: #2863FD;">查看</span>
                     <span v-if="props.row.isreg == 0"><el-button @click="tempClick(props.row.mid, props.row.isreg, 2, props.$index)" size="mini" type="danger">注册</el-button></span>
@@ -189,8 +189,8 @@
         <el-table-column width="60px" label="ID">
           <template slot-scope="props">
             <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.$index + 1 }}</span>
-            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.$index + 1 }}</span>
-            <span v-if="props.row.status == 1" style="color: green;">{{ props.$index + 1 }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2962ff;">{{ props.$index + 1 }}</span>
+            <span v-if="props.row.status == 1" style="color: #1aad19;">{{ props.$index + 1 }}</span>
             <span v-if="props.row.status == 2" style="color: red;">{{ props.$index + 1 }}</span>
           </template>
         </el-table-column>
@@ -204,24 +204,24 @@
         <el-table-column label="企业名称">
           <template slot-scope="props">
             <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.company }}</span>
-            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.company }}</span>
-            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.company }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2962ff;">{{ props.row.company }}</span>
+            <span v-if="props.row.status == 1" style="color: 1aad19;">{{ props.row.company }}</span>
             <span v-if="props.row.status == 2" style="color: red;">{{ props.row.company }}</span>
           </template>
         </el-table-column>
         <el-table-column label="兼职编号">
           <template slot-scope="props">
             <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.number }}</span>
-            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.number }}</span>
-            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.number }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2962ff;">{{ props.row.number }}</span>
+            <span v-if="props.row.status == 1" style="color: 1aad19;">{{ props.row.number }}</span>
             <span v-if="props.row.status == 2" style="color: red;">{{ props.row.number }}</span>
           </template>
         </el-table-column>
         <el-table-column width="220px" label="提交日期">
           <template slot-scope="props">
             <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">{{ props.row.updated }}</span>
-            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">{{ props.row.updated }}</span>
-            <span v-if="props.row.status == 1" style="color: green;">{{ props.row.updated }}</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2962ff;">{{ props.row.updated }}</span>
+            <span v-if="props.row.status == 1" style="color: 1aad19;">{{ props.row.updated }}</span>
             <span v-if="props.row.status == 2" style="color: red;">{{ props.row.updated }}</span>
           </template>
         </el-table-column>
@@ -234,11 +234,11 @@
             <span v-if="props.row.status == 0 && props.row.isrelease == 1 && props.row.isreg == 1" ref="radios">
               <span style="margin-right: 10px;">
                 <input type="checkbox" :value="1" :data-mid="props.row.mid" :class="'radiosTwo radiosTwo'+props.row.mid" @click="radiosCheck(1, 'radiosTwo'+props.row.mid)" style="position: relative;top: 3px;" >
-                <el-button size="mini" type="success">通过</el-button>
+                <el-button size="mini" @click="oneBy(1, props.row.mid)" type="success">通过</el-button>
               </span>
               <span>
                 <input type="checkbox" :value="2" :data-mid="props.row.mid" :class="'radiosTwo radiosTwo'+props.row.mid" @click="radiosCheck(2, 'radiosTwo'+props.row.mid)" style="position: relative;top: 3px;" >
-                <el-button size="mini" type="danger">拒绝</el-button>
+                <el-button size="mini" @click="oneBy(2, props.row.mid)" type="danger">拒绝</el-button>
               </span>
             </span>
           </template>
@@ -246,9 +246,9 @@
         <el-table-column label="状态">
           <template slot-scope="props">
             <span v-if="props.row.status == 0 && props.row.istop == 0" style="color: #999;">待审核</span>
-            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2761FF;">待审核</span>
-            <span v-else-if="props.row.status == 1" style="color: green;">已通过</span>
-            <span v-else-if="props.row.status == 2" style="color: red;">已拒接</span>
+            <span v-if="props.row.status == 0 && props.row.istop == 1" style="color: #2962ff;">待审核</span>
+            <span v-else-if="props.row.status == 1" style="color: 1aad19;">已通过</span>
+            <span v-else-if="props.row.status == 2" style="color: red;">已拒绝</span>
           </template>
         </el-table-column>
       </el-table>
@@ -260,7 +260,7 @@
          <el-button type="danger" size="mini" @click="allBy(2)">一键拒绝</el-button>
         </div>
         <div style="float: right;">
-          已选 <el-button style="margin: 0 10px;" type="primary" size="mini" @click="allBtn">一键通过</el-button>
+          已选 <el-button style="margin: 0 10px;" type="primary" size="mini" @click="allBtn">一键提交</el-button>
         </div>
 
       </div>
@@ -292,7 +292,7 @@
               <el-button @click="examineBtn(scope.row.id, scope.$index)" size="mini" type="primary">已打款</el-button>
             </span>
             <span v-else>
-              <span style="margin-right: 15px;color: lawngreen;">已完成</span>
+              <span style="margin-right: 15px;color: #09bb07;">已完成</span>
               <el-button @click="visiblea(scope.row.voucher)" size="mini" type="primary">查看凭证</el-button>
             </span>
           </template>
@@ -300,8 +300,8 @@
       </el-table>
     </div>
     <!-- 查看凭证 -->
-    <el-dialog title="查看汇款凭证" :visible.sync="visible" width="35%" center>
-      <div style="height: 160px;width: 250px;border: 1px solid #DBDBDB;border-radius: 5px;margin: 0 auto;"><img style="height: 100%;width: 100%;" :src="baseURL+'/'+imgUrl" alt="" /></div>
+    <el-dialog title="查看汇款凭证" :visible.sync="visible"  center>
+      <div style="border: 1px solid #DBDBDB;border-radius: 5px;margin: 0 auto;"><img style="height: 100%;width: 100%;" :src="baseURL+'/'+imgUrl" alt="" /></div>
     </el-dialog>
     <!-- 上传凭证 -->
     <el-dialog :visible.sync="centerDialogVisible" width="35%" center>
@@ -345,20 +345,6 @@
             			  label="本月提现金额">
             			</el-table-column>
                 </el-table>
-           <!-- <div style="width: 80%;margin: 0 auto;text-align: center;font-size: 14px;font-weight: 600;">
-              <el-col :span="4">日期</el-col>
-              <el-col :span="4">本月累计推广</el-col>
-              <el-col :span="4">本月有效推广</el-col>
-              <el-col :span="5">本月绩效基数</el-col>
-              <el-col :span="4">本月提现金额</el-col>
-            </div>
-            <div v-for="item in props.row.descdata" style="line-height: 25px;width: 80%;margin: 0 auto;text-align: center;font-size: 12px;">
-              <el-col :span="4">{{ item.date }}</el-col>
-              <el-col :span="4">{{ item.byljtg }}</el-col>
-              <el-col :span="4">{{ item.byyxtg }}</el-col>
-              <el-col :span="5">{{ item.byjxjs }}</el-col>
-              <el-col :span="4">{{ item.bytxje }}</el-col>
-            </div> -->
           </template>
         </el-table-column>
         <el-table-column width="60px" label="ID">
@@ -426,9 +412,14 @@ export default {
     allBy(status) {
        let list = [];
        let arr = this.checkVal;
+
        for(let i = 0; i < arr.length; i++) {
          let obj = {mid:arr[i],status:status};
          list.push(obj)
+       }
+       if(list.length == 0) {
+         alert('请先选中再通过或拒绝');
+         return;
        }
        this.axios(list)
     },
@@ -444,6 +435,16 @@ export default {
             list.push(obj);
          }
        }
+
+       if(list.length == 0) {
+         alert('请先选中再提交');
+         return;
+       }
+      this.axios(list)
+    },
+    // 单个通过 或拒绝
+    oneBy(status, mid) {
+      let list = [{mid, status}];
       this.axios(list)
     },
     // 请求封装
@@ -638,6 +639,18 @@ export default {
 .el-table .el-table__row td {
   text-align: center;
 }
+
+
+/*
+#list .el-button--success {
+  background-color: #09bb07;
+  border: none;
+}
+
+#list .el-button--danger {
+  background-color: #ee5858;
+  border: none;
+} */
 
 
 </style>

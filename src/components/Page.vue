@@ -35,7 +35,7 @@
     methods: {
       handleCurrentChange(e) {
         let obj = {e:e,page:this.page1}
-         this.$emit('userorder',obj);
+         //this.$emit('userorder',obj);
          // 基本资料
          this.$emit('table',obj);
           // 商家推广
@@ -53,7 +53,7 @@
         this.page1 = e;
         this.currentPage = 1;
         let obj = {e:1,page:e}
-        this.$emit('userorder',obj);
+        //this.$emit('userorder',obj);
         // 基本资料
         this.$emit('table',obj);
          // 商家推广

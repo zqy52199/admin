@@ -49,12 +49,14 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="operat"
             width="180"
             label="操作">
-           <router-link to="/order/user/detail"><span style="color: #0000FF;cursor: pointer;">查看详情</span></router-link>
-            &nbsp;&nbsp;
-            <span style="color: #ff2951;cursor: pointer;">关闭订单</span>
+            <template slot-scope="props" >
+              <router-link :to="{path:'/order/user/detail', query:{id:props.row.OId}}"><span style="color: #2962ff;cursor: pointer;">查看详情</span></router-link>
+               &nbsp;&nbsp;
+               <span style="color: #ff2150;cursor: pointer;">关闭订单</span>
+            </template>
+
           </el-table-column>
         </el-table>
   </div>
@@ -82,3 +84,4 @@
 
 <style>
 </style>
+

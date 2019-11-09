@@ -99,6 +99,9 @@
                        that.imgUrl = this.result
                      }
            }
+    },
+    mounted() {
+      
     }
   }
 </script>
