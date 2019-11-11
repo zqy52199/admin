@@ -507,6 +507,10 @@ export default {
     },
     // 已打款确定
     determine() {
+      if(this.imgUrl == '') {
+        alert('请先上传汇款凭证')
+        return;
+      }
       request({
         url:'/admin/Smallprogram/examine',
         method:'post',
@@ -534,7 +538,8 @@ export default {
       let formData = new FormData();
       formData.append('images', file);
       axios.post('https://vx.eaglesell.com.cn/index.php/admin/PublicOperate/uploadimg', formData).then(res => {
-        this.imgUrl =  res.data.data[0]
+        this.imgUrl =  res.data.data[0];
+        e.target.files = [];
       });
     },
     // 查看凭证
@@ -544,6 +549,7 @@ export default {
     },
     // 上传凭证
     examineBtn(id, index) {
+      this.imgName = '';
       this.centerDialogVisible = true;
       this.id = id;
       this.index = index;

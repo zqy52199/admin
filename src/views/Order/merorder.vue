@@ -71,7 +71,6 @@
 
         this.merchantOrder = val.data.list;
         this.nums = val.data.nums;
-         console.log(this.merchantOrder)
       },
       handleClick(e) {
         //console.log(e)
@@ -83,7 +82,6 @@
         method: 'post',
         data:{}
       }).then(res => {
-        console.log(res)
         if(res.error == 0) {
           this.merchantOrder = res.data.list;
           this.nums = res.data.nums;

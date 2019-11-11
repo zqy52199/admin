@@ -1,18 +1,26 @@
 <template>
   <div id="app" style="height: 100%;width: 100%;">
     <div v-if="!homeShow" class="app_login" :style="backgroundDiv">
-      <div class="app_login_box">
-        <div class="app_login_user">
-          <input v-model="formData.user" type="text" placeholder="请输入用户名">
+      <div class="app_login_box" :style="backgroundDivCenter">
+        <div class="form_list">
+          <h1 style="color: #2895FD;">EAGLESELL</h1>
+          <h3 style="color: #666;margin-bottom: 30px;">鹰洋 · 后台管理系统</h3>
+          <div class="app_login_user">
+            <img class="login_img_bg" src="@/assets/new_login_username_bg.png" alt="">
+            <input v-model="formData.user" type="text" placeholder="请输入用户名">
+          </div>
+          <div class="app_login_password">
+            <img class="login_img_bg" src="@/assets/new_login_password_bg.png"  alt="">
+            <input v-model="formData.pwd" type="password" placeholder="请输入密码">
+          </div>
+          <div class="app_login_code">
+            <img class="login_img_bg" src="@/assets/new_login_excode_bg.png" alt="">
+            <input type="text" @keyup.enter="onSubmit" v-model="formData.code" style="width: 110px;" placeholder="请输入认证码">
+            <span style="float: right;margin-top: 6px;"  @click="changeCode"><Canvas ref="myClick" /></span>
+          </div>
+          <button @click="onSubmit" class="btn">立即登录</button>
         </div>
-        <div class="app_login_password">
-          <input v-model="formData.pwd" type="password" placeholder="请输入密码">
-        </div>
-        <div class="app_login_code">
-          <input type="text" @keyup.enter="onSubmit" v-model="formData.code" style="width: 110px;" placeholder="请输入认证码">
-          <span style="float: right;margin-top: 6px;"  @click="changeCode"><Canvas ref="myClick" /></span>
-        </div>
-        <button @click="onSubmit" class="btn">立即登录</button>
+
       </div>
     </div>
 
@@ -118,10 +126,16 @@ export default {
   data() {
     return {
       backgroundDiv: {
-        backgroundImage: 'url(' + require('@/assets/adminBg.jpg') + ')',
+        backgroundImage: 'url(' + require('@/assets/adminBg.png') + ')',
         width:"100%",
         height:"100%",
-        backgroundSize:'cover'},
+        backgroundSize:'cover',
+      },
+      backgroundDivCenter: {backgroundImage: 'url(' + require('@/assets/adminBgCenter.png') + ')',
+      width:"600px",
+      height:"350px",
+      backgroundSize:'cover'
+      },
       token:'',
       // 登录页面显示
       homeShow:false,
@@ -514,9 +528,6 @@ tbody .cell {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background: #FFFFFF;
-  padding: 50px;
-  padding-right: 100px;
 }
 
 .app_login_box input {
@@ -527,7 +538,7 @@ tbody .cell {
   padding-left: 10px;
 }
 
-.app_login_box > div {
+.app_login_box .form_list > div {
   border-bottom: 1px solid #DBDBDB;
 height: 42px;
 line-height: 41px;
@@ -550,6 +561,21 @@ line-height: 41px;
 
 .app_login_box .btn:hover {
   background: #79B5F3;
+}
+
+.app_login_box .form_list {
+  box-sizing: border-box;
+  padding: 10px 28px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 310px;
+  height: 330px;
+}
+
+.login_img_bg {
+  position: relative;
+  top: 2px;
 }
 
 </style>

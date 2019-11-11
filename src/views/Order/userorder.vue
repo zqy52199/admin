@@ -89,7 +89,6 @@
       },
       // 接受页数返回
       userorder(val) {
-        console.log(val)
       }
 
     },

@@ -139,7 +139,6 @@
       }
     }).then(res => {
       if (res.error == 0) {
-       console.log(res.data)
        this.goodsInfo = res.data.goodsinfo;
        this.memberInfo = res.data.memberinfo;
        this.orderInfo = res.data.orderinfo;
