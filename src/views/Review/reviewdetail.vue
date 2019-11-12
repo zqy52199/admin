@@ -1,7 +1,7 @@
 <template>
   <div id="reviewDetail">
     <!-- 资质审核 -->
-    <div v-if="false" class="qualificationReview">
+    <div class="qualificationReview">
       <div class="header_box">
         当前审核状态:  <span style="color: #FF2150;font-size: 14px;font-weight: 700;" v-show="1">待审核</span>
                       <span style="color: #E75D01;font-size: 14px;font-weight: 700;" v-show="1">已拒绝</span>
@@ -806,11 +806,12 @@
       </div>
     </div>
     <!-- 货款审核 -->
-    <div class="paymentReview">
+    <div v-if="false" class="paymentReview">
       <div>
         <el-tabs v-model="detailActiveName">
-            <el-tab-pane label="首页" name="detailFirst">
-              
+            <el-tab-pane label="全部" name="detailFirst">
+              <Search />
+              <List :listArr="listArr" />
             </el-tab-pane>
             <el-tab-pane label="首款申请" name="detailSecond">首款申请</el-tab-pane>
             <el-tab-pane label="发货款申请" name="detailThird">发货款申请</el-tab-pane>
@@ -825,7 +826,9 @@
 </template>
 
 <script>
-  import Editor from '@/components/Editor'
+  import Editor from '@/components/Editor';
+  import Search from '@/components/review/detailCom/Search';
+  import List from '@/components/review/detailCom/List';
   export default {
     name:'reviewdetail',
     data() {
@@ -834,11 +837,36 @@
         activeName: 'first',
         detailActiveName:'detailFirst',
         language: ['中文', '英文', '西文'],
-        languageIndex:0
+        languageIndex:0,
+        listArr:[{
+          menberAccount:'商家账号',
+          shopName:'商品名称',
+          orderNumber:'123456',
+          orderStatus:'申请类型',
+          applicationTime:'申请时间',
+          orderType:'1'
+        },{
+          menberAccount:'商家账号',
+          shopName:'商品名称',
+          orderStatus:'申请类型',
+          orderNumber:'123456',
+          applicationTime:'申请时间',
+          orderType:'2'
+        },{
+          menberAccount:'商家账号',
+          shopName:'商品名称',
+          orderNumber:'123456',
+          orderStatus:'申请类型',
+          applicationTime:'申请时间',
+          orderType:'3'
+        }
+        ]
       }
     },
     components:{
-      Editor
+      Editor,
+      Search,
+      List
     },
     methods: {
       langClick(index) {
