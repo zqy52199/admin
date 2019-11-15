@@ -31,7 +31,7 @@ export default {
   },
   data () {
     return {
-      content: '<img src="http://www.eaglesell.com/static/home/images/Introduction-tu.jpg" />',
+      content: '请输入内容',
       editorOption: {
         modules: {
           toolbar: {

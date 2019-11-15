@@ -19,6 +19,7 @@
               <div>店铺名称：啥撒旦法撒旦法</div>
               <div>英文名称：niho</div>
               <div>西文名称：sdfasdjf</div>
+              <div>商家类型：墨西哥自营商家</div>
               <div>联系QQ号：</div>
               <div>店铺标题：</div>
             </div>

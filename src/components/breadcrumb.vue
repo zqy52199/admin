@@ -41,6 +41,12 @@ export default {
           matched = [{ path: 'translation', meta: { title: '订单管理' } }].concat(matched); //翻译管理
         } else if (first.path == '/review') {
           matched = [{ path: 'review', meta: { title: '审核中心' } }].concat(matched);
+        } else if (first.path == '/comprehensive/personal') {
+          matched = [{ path: 'personal', meta: { title: '综合管理' } }].concat(matched);
+        } else if (first.path == '/comprehensive/protocol') {
+          matched = [{ path: 'protocol', meta: { title: '综合管理' } }].concat(matched);
+        } else if (first.path == '/comprehensive/message') {
+          matched = [{ path: 'message', meta: { title: '综合管理' } }].concat(matched);
         }
 
         // else if(first.path =='/review') {

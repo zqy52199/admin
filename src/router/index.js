@@ -18,6 +18,12 @@ const Merchant = () => import('../views/Order/merchant');
 const Review = () => import('../views/Review/review');
 // 审核中心详情页
 const ReviewDetail = () => import('../views/Review/reviewdetail');
+// 综合管理 个人中心
+const Personal = () => import('../views/Comprehensive/personal');
+// 综合管理 协议管理
+const Protocol = () => import('../views/Comprehensive/protocol');
+// 综合管理 消息管理
+const Message = () => import('../views/Comprehensive/message');
 
 
 // 1.安装插件
@@ -100,6 +106,33 @@ const routes = [{
         title: '查看详情'
       }
     }]
+  },
+  // 综合管理 个人中心
+  {
+    path:'/comprehensive/personal',
+    name:Personal,
+    component:Personal,
+    meta:{
+      title:'个人中心'
+    }
+  },
+  // 综合管理 协议管理
+  {
+    path:'/comprehensive/protocol',
+    name:Protocol,
+    component:Protocol,
+    meta:{
+      title:'协议管理'
+    }
+  },
+  // 综合管理 消息管理
+  {
+    path:'/comprehensive/message',
+    name:Message,
+    component:Message,
+    meta:{
+      title:'消息管理'
+    }
   },
   {
     // 小程序--业务员

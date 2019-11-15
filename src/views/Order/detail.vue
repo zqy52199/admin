@@ -5,11 +5,7 @@
         <el-col :span="6">
           <div>
             当前订单状态：
-            <span style="color: blue;" v-if="orderInfo.Status < 1">未支付</span>
-            <span style="color: blue;" v-else-if="orderInfo.Status < 4">待确认</span>
-            <span style="color: blue;" v-else-if="orderInfo.Status < 6">待运输</span>
-            <span style="color: blue;" v-else-if="orderInfo.Status < 8">待收货</span>
-            <span style="color: blue;" v-else>已完成</span>
+            <span style="color: blue;">{{orderInfo.Status}}</span>
           </div>
         </el-col>
         <el-col :span="6">
@@ -31,14 +27,14 @@
     </div>
     <div class="detail_box">
       <div class="box_user">
-        <!-- <el-row>
+        <el-row>
           <el-col :span="24"><h3><img class="icon_head" src="@/assets/twoIcon/buyImg.png" alt="">买家信息</h3></el-col>
-          <el-col :span="6"><div>买家账号：{{addressInfo.Name}}</div></el-col>
+          <el-col :span="6"><div>订单编号：{{orderInfo.OrderId}}</div></el-col>
           <el-col :span="6"><div>收货人：{{addressInfo.Name}}</div></el-col>
           <el-col :span="6"><div>手机号码：{{addressInfo.Mobile}}</div></el-col>
           <el-col :span="6"><div>固定电话：{{addressInfo.Phome}}</div></el-col>
           <el-col :span="24"><div>收货地址：{{addressInfo.Address}}</div></el-col>
-        </el-row> -->
+        </el-row>
       </div>
       <div class="box_order">
         <el-row>
@@ -61,10 +57,10 @@
             <div>清关方式：{{ orderInfo.Custom == 1 ? '鹰洋代理' : '自行清关' }}</div>
           </el-col>
           <el-col :span="6">
-            <div>运货方式：{{ orderInfo.transport }}</div>
+            <div>运货方式：{{ orderInfo.transport == 1 ? '海运' : '空运' }}</div>
           </el-col>
           <el-col :span="6">
-            <div>运输计费方式：{{ orderInfo.OrderId }}</div>
+            <div>运输计费方式：{{ orderInfo.transport == 1 ? '海运' : '空运' }}</div>
           </el-col>
           <el-col :span="6">
             <div>
@@ -76,7 +72,7 @@
             </div>
           </el-col>
           <el-col :span="6">
-            <div>运输费用：{{ orderInfo.priceT }}</div>
+            <div>运输费用：{{ (sum(orderInfo.priceT) - sum(orderInfo.Price_z)).toFixed(2) }}</div>
           </el-col>
           <el-col :span="24">
             <div class="goods_list">
@@ -91,14 +87,16 @@
               <div class="goods_list_content">
                 <div class="goods_list_row" v-for="(item, index) in goodsInfo" :key="index">
                   <el-col :span="6">
-                    <el-col :span="6">{{ item.goodsImg }}</el-col>
+                    <el-col :span="6">
+                      <img :src="item.img_china" alt="">
+                    </el-col>
                     <el-col style="text-align: left;padding: 0 5px;" :span="18">
                       <div>{{ item.Name_lang_1 }}</div>
                       <div>{{ item.MemberName }}</div>
                     </el-col>
                   </el-col>
                   <el-col :span="5">
-                    <div v-for="towItem in item.specification">{{ towItem.name }}:{{ towItem.value }}</div>
+                    <div v-for="towItem in item.goodsattr">{{ towItem.sizeName }}:{{ towItem.sizeValue }}</div>
                   </el-col>
                   <el-col :span="3">
                     <div>{{ sum(item.price) }}</div>
@@ -110,7 +108,7 @@
                     <div>{{ sum(item.discount) == 1.0 ? '无' : sum(item.discount) + '折' }}</div>
                   </el-col>
                   <el-col :span="4">
-                    <div>{{ sum(parseFloat(item.price) * item.number) }}</div>
+                    <div class="red">{{ sum(parseFloat(item.price) * item.number) }}</div>
                   </el-col>
                 </div>
               </div>
@@ -121,14 +119,16 @@
               当日汇款：
               <span class="red">{{ orderInfo.rate }}</span>
               美元&nbsp;&nbsp;&nbsp;&nbsp;应付金额：人民币(含运费)：
-              <span class="red">￥ {{ orderInfo.priceT / orderInfo.rate }}</span>
+              <span class="red">￥ {{ sum(orderInfo.priceT * orderInfo.rate) }}</span>
               &nbsp;&nbsp;|&nbsp;&nbsp; 美元(含运费)：
-              <span class="red">$ {{ orderInfo.priceT }}</span>
+              <span class="red">$ {{ sum(orderInfo.priceT) }}</span>
             </div>
           </el-col>
           <el-col :span="24">
             <span>用户汇款凭证：</span>
-            <span>图片1234123123123123123</span>
+            <span>
+              <img :src="orderInfo.order_img" alt="">
+            </span>
           </el-col>
         </el-row>
       </div>
@@ -250,9 +250,9 @@
               </template>
             </el-table-column>
             <el-table-column label="流程" prop="Process"></el-table-column>
-            <el-table-column label="部门" prop="department"></el-table-column>
-            <el-table-column label="操作人" prop="operator"></el-table-column>
-            <el-table-column label="操作时间" prop="operatorTime"></el-table-column>
+            <el-table-column label="部门" prop="adminId"></el-table-column>
+            <el-table-column label="操作人" prop="adminDepartment"></el-table-column>
+            <el-table-column label="操作时间" prop="optime"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -417,6 +417,7 @@ export default {
         this.orderInfo = res.data.orderinfo;
         this.addressInfo = res.data.addressinfo;
         this.goodsInfo = res.data.goodsinfo;
+        this.orderArr = res.data.orderprocess;
       } else {
         alert(res.message);
       }
